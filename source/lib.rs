@@ -3,19 +3,19 @@
 use regex::Regex;
 use strong_xml::{XmlError, XmlRead, XmlWrite};
 
-/// <opml> is an XML element, with a single required attribute, version; a <head> element and a <body> element, both of which are required.
+/// `<opml>` is an XML element, with a single required attribute, version; a `<head>` element and a `<body>` element, both of which are required.
 #[derive(XmlWrite, XmlRead, PartialEq, Debug)]
 #[xml(tag = "opml")]
 pub struct OPML {
-  ///  The version attribute is a version string, of the form, x.y, where x and y are both numeric strings.
+  /// The version attribute is a version string, of the form, x.y, where x and y are both numeric strings.
   #[xml(attr = "version")]
   pub version: String,
 
-  /// A <head> contains zero or more optional elements.
+  /// A `<head>` contains zero or more optional elements.
   #[xml(child = "head")]
   pub head: Head,
 
-  /// A <body> contains one or more <outline> elements.
+  /// A `<body>` contains one or more `<outline>` elements.
   #[xml(child = "body")]
   pub body: Body,
 }
@@ -43,7 +43,7 @@ impl OPML {
       ));
     }
 
-    // SPEC: A <body> contains one or more <outline> elements.
+    // SPEC: A `<body>` contains one or more `<outline>` elements.
     if opml.body.outlines.is_empty() {
       return Err("OPML body has no outlines.".to_string());
     }
@@ -52,7 +52,7 @@ impl OPML {
   }
 }
 
-/// A <head> contains zero or more optional elements.
+/// A `<head>` contains zero or more optional elements.
 #[derive(XmlWrite, XmlRead, PartialEq, Debug)]
 #[xml(tag = "head")]
 pub struct Head {
@@ -109,7 +109,7 @@ pub struct Head {
   pub window_right: Option<i32>,
 }
 
-/// A <body> contains one or more <outline> elements.
+/// A `<body>` contains one or more `<outline>` elements.
 #[derive(XmlWrite, XmlRead, PartialEq, Debug)]
 #[xml(tag = "body")]
 pub struct Body {
@@ -118,7 +118,7 @@ pub struct Body {
   pub outlines: Vec<Outline>,
 }
 
-/// An <outline> is an XML element containing at least one required attribute, text, and zero or more additional attributes. An <outline> may contain zero or more <outline> sub-elements. No attribute may be repeated within the same <outline> element.
+/// An `<outline>` is an XML element containing at least one required attribute, text, and zero or more additional attributes. An `<outline>` may contain zero or more `<outline>` sub-elements. No attribute may be repeated within the same `<outline>` element.
 #[derive(XmlWrite, XmlRead, PartialEq, Debug)]
 #[xml(tag = "outline")]
 pub struct Outline {
@@ -127,7 +127,7 @@ pub struct Outline {
   #[xml(attr = "text")]
   pub text: String,
 
-  /// A string that says how the other attributes of the <outline> are interpreted.
+  /// A string that says how the other attributes of the `<outline>` are interpreted.
   #[xml(attr = "type")]
   pub r#type: Option<String>,
 

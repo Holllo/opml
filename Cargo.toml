@@ -3,7 +3,7 @@
 [package]
 name = "opml"
 authors = ["Holllo <helllo@holllo.cc>"]
-version = "0.1.0"
+version = "0.1.1"
 license = "MIT/Apache-2.0"
 description = "An OPML 2.0 parser for Rust."
 repository = "https://gitlab.com/holllo/opml-rs"
