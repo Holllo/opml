@@ -1,0 +1,164 @@
+// TODO: Extract all the OPML strings out and put them into their own files.
+
+use opml::*;
+
+#[test]
+fn test_minimum_valid_opml() {
+  assert_eq!(
+    OPML::new(
+      r#"
+<opml version="2.0">
+  <head/>
+  <body>
+    <outline text="Outline Text"/>
+  </body>
+</opml>"#
+    )
+    .unwrap(),
+    OPML {
+      version: "2.0".to_string(),
+      head: Head {
+        title: None,
+        date_created: None,
+        date_modified: None,
+        owner_name: None,
+        owner_email: None,
+        owner_id: None,
+        docs: None,
+        expansion_state: None,
+        vert_scroll_state: None,
+        window_top: None,
+        window_left: None,
+        window_bottom: None,
+        window_right: None,
+      },
+      body: Body {
+        outlines: vec![Outline {
+          text: "Outline Text".to_string(),
+          r#type: None,
+          is_breakpoint: false,
+          is_comment: false,
+          created: None,
+          category: None,
+          xml_url: None,
+          description: None,
+          html_url: None,
+          language: None,
+          title: None,
+          version: None,
+          url: None,
+          outlines: vec![]
+        }]
+      },
+    }
+  );
+}
+
+#[test]
+fn test_valid_opml_with_everything() {
+  assert_eq!(
+    OPML::new(
+      r#"
+<opml version="2.0">
+  <head>
+    <title>Title</title>
+    <dateCreated>Date Created</dateCreated>
+    <dateModified>Date Modified</dateModified>
+    <ownerName>Owner Name</ownerName>
+    <ownerEmail>Owner Email</ownerEmail>
+    <ownerId>Owner ID</ownerId>
+    <docs>http://dev.opml.org/spec2.html</docs>
+    <expansionState>0,1</expansionState>
+    <vertScrollState>0</vertScrollState>
+    <windowTop>1</windowTop>
+    <windowLeft>2</windowLeft>
+    <windowBottom>3</windowBottom>
+    <windowRight>4</windowRight>
+  </head>
+  <body>
+    <outline
+      text="Outline Text"
+      type="Outline Type"
+      isBreakpoint="true"
+      isComment="true"
+      created="Outline Date"
+      category="Outline Category"
+      xmlUrl="Outline XML URL"
+      description="Outline Description"
+      htmlUrl="Outline HTML URL"
+      language="Outline Language"
+      title="Outline Title"
+      version="Outline Version"
+      url="Outline URL">
+      <outline
+        text="Nested Outline Text"
+        type="Nested Outline Type"
+        isBreakpoint="true"
+        isComment="false"
+        created="Nested Outline Date"
+        category="Nested Outline Category"
+        xmlUrl="Nested Outline XML URL"
+        description="Nested Outline Description"
+        htmlUrl="Nested Outline HTML URL"
+        language="Nested Outline Language"
+        title="Nested Outline Title"
+        version="Nested Outline Version"
+        url="Nested Outline URL"/>
+    </outline>
+  </body>
+</opml>"#
+    )
+    .unwrap(),
+    OPML {
+      version: "2.0".to_string(),
+      head: Head {
+        title: Some("Title".to_string()),
+        date_created: Some("Date Created".to_string()),
+        date_modified: Some("Date Modified".to_string()),
+        owner_name: Some("Owner Name".to_string()),
+        owner_email: Some("Owner Email".to_string()),
+        owner_id: Some("Owner ID".to_string()),
+        docs: Some("http://dev.opml.org/spec2.html".to_string()),
+        expansion_state: Some("0,1".to_string()),
+        vert_scroll_state: Some(0),
+        window_top: Some(1),
+        window_left: Some(2),
+        window_bottom: Some(3),
+        window_right: Some(4),
+      },
+      body: Body {
+        outlines: vec![Outline {
+          text: "Outline Text".to_string(),
+          r#type: Some("Outline Type".to_string()),
+          is_breakpoint: true,
+          is_comment: true,
+          created: Some("Outline Date".to_string()),
+          category: Some("Outline Category".to_string()),
+          xml_url: Some("Outline XML URL".to_string()),
+          description: Some("Outline Description".to_string()),
+          html_url: Some("Outline HTML URL".to_string()),
+          language: Some("Outline Language".to_string()),
+          title: Some("Outline Title".to_string()),
+          version: Some("Outline Version".to_string()),
+          url: Some("Outline URL".to_string()),
+          outlines: vec![Outline {
+            text: "Nested Outline Text".to_string(),
+            r#type: Some("Nested Outline Type".to_string()),
+            is_breakpoint: true,
+            is_comment: false,
+            created: Some("Nested Outline Date".to_string()),
+            category: Some("Nested Outline Category".to_string()),
+            xml_url: Some("Nested Outline XML URL".to_string()),
+            description: Some("Nested Outline Description".to_string()),
+            html_url: Some("Nested Outline HTML URL".to_string()),
+            language: Some("Nested Outline Language".to_string()),
+            title: Some("Nested Outline Title".to_string()),
+            version: Some("Nested Outline Version".to_string()),
+            url: Some("Nested Outline URL".to_string()),
+            outlines: vec![]
+          }]
+        }]
+      },
+    }
+  )
+}

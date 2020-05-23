@@ -1,0 +1,19 @@
+# https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package]
+name = "opml"
+authors = ["Holllo <helllo@holllo.cc>"]
+version = "0.1.0"
+license = "MIT/Apache-2.0"
+description = "An OPML 2.0 parser for Rust."
+repository = "https://gitlab.com/holllo/opml-rs"
+readme = "ReadMe.md"
+edition = "2018"
+keywords = ["xml", "opml"]
+
+[lib]
+path = "source/lib.rs"
+
+[dependencies]
+regex = "1.3.7"
+strong-xml = "0.6.0"
