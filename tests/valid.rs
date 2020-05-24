@@ -1,20 +1,11 @@
-// TODO: Extract all the OPML strings out and put them into their own files.
+use std::fs::read_to_string as read;
 
 use opml::*;
 
 #[test]
 fn test_minimum_valid_opml() {
   assert_eq!(
-    OPML::new(
-      r#"
-<opml version="2.0">
-  <head/>
-  <body>
-    <outline text="Outline Text"/>
-  </body>
-</opml>"#
-    )
-    .unwrap(),
+    OPML::new(&read("tests/samples/minimum_valid_opml.opml").unwrap()).unwrap(),
     OPML {
       version: "2.0".to_string(),
       head: Head {
@@ -57,58 +48,8 @@ fn test_minimum_valid_opml() {
 #[test]
 fn test_valid_opml_with_everything() {
   assert_eq!(
-    OPML::new(
-      r#"
-<opml version="2.0">
-  <head>
-    <title>Title</title>
-    <dateCreated>Date Created</dateCreated>
-    <dateModified>Date Modified</dateModified>
-    <ownerName>Owner Name</ownerName>
-    <ownerEmail>Owner Email</ownerEmail>
-    <ownerId>Owner ID</ownerId>
-    <docs>http://dev.opml.org/spec2.html</docs>
-    <expansionState>0,1</expansionState>
-    <vertScrollState>0</vertScrollState>
-    <windowTop>1</windowTop>
-    <windowLeft>2</windowLeft>
-    <windowBottom>3</windowBottom>
-    <windowRight>4</windowRight>
-  </head>
-  <body>
-    <outline
-      text="Outline Text"
-      type="Outline Type"
-      isBreakpoint="true"
-      isComment="true"
-      created="Outline Date"
-      category="Outline Category"
-      xmlUrl="Outline XML URL"
-      description="Outline Description"
-      htmlUrl="Outline HTML URL"
-      language="Outline Language"
-      title="Outline Title"
-      version="Outline Version"
-      url="Outline URL">
-      <outline
-        text="Nested Outline Text"
-        type="Nested Outline Type"
-        isBreakpoint="true"
-        isComment="false"
-        created="Nested Outline Date"
-        category="Nested Outline Category"
-        xmlUrl="Nested Outline XML URL"
-        description="Nested Outline Description"
-        htmlUrl="Nested Outline HTML URL"
-        language="Nested Outline Language"
-        title="Nested Outline Title"
-        version="Nested Outline Version"
-        url="Nested Outline URL"/>
-    </outline>
-  </body>
-</opml>"#
-    )
-    .unwrap(),
+    OPML::new(&read("tests/samples/valid_opml_with_everything.opml").unwrap())
+      .unwrap(),
     OPML {
       version: "2.0".to_string(),
       head: Head {
