@@ -1,21 +1,45 @@
+//! This crate provides an API to parse and construct [OPML files](https://dev.opml.org/spec2.html) to and from regular Rust structs.
+//!
+//! ## Getting Started
+//!
+//! ```rust
+//! use opml::OPML;
+//!
+//! let xml = r#"<opml version="2.0"><head/><body><outline text="Outline"/></body></opml>"#;
+//! let parsed = OPML::new(xml).unwrap();
+//!
+//! println!("{:#?}", parsed);
+//! ```
+//!
+//! ## License
+//!
+//! Open-sourced with either the
+//!
+//! * [Apache License, Version 2.0](https://gitlab.com/holllo/opml-rs/-/blob/master/License-Apache) (http://www.apache.org/licenses/LICENSE-2.0)
+//! * [MIT license](https://gitlab.com/holllo/opml-rs/-/blob/master/License-MIT) (http://opensource.org/licenses/MIT)
+//!
+//! at your option.
+//!
+//! The samples [located in `tests/spec_samples`](https://gitlab.com/holllo/opml-rs/-/blob/master/tests/spec_samples) were [taken from the OPML 2.0 spec](http://dev.opml.org/spec2.html#examples) and are subject to [their own license](https://gitlab.com/holllo/opml-rs/-/blob/master/tests/spec_samples/License).
+
 // TODO: Maybe use a date-time type for all the date-time places?
 
 use regex::Regex;
 use strong_xml::{XmlError, XmlRead, XmlWrite};
 
-/// `<opml>` is an XML element, with a single required attribute, version; a `<head>` element and a `<body>` element, both of which are required.
+/// The top-level `<opml>` element.
 #[derive(XmlWrite, XmlRead, PartialEq, Debug)]
 #[xml(tag = "opml")]
 pub struct OPML {
-  /// The version attribute is a version string, of the form, x.y, where x and y are both numeric strings.
+  /// The version attribute from the element.
   #[xml(attr = "version")]
   pub version: String,
 
-  /// A `<head>` contains zero or more optional elements.
+  /// The `<head>` child element. Contains the metadata of the OPML document.
   #[xml(child = "head")]
   pub head: Head,
 
-  /// A `<body>` contains one or more `<outline>` elements.
+  /// The `<body>` child element. Contains all the `<outlines>`.
   #[xml(child = "body")]
   pub body: Body,
 }
@@ -52,7 +76,8 @@ impl OPML {
   }
 }
 
-/// A `<head>` contains zero or more optional elements.
+/// The `<head>` child element of `<opml>`.
+/// Contains the metadata of the OPML document.
 #[derive(XmlWrite, XmlRead, PartialEq, Debug)]
 #[xml(tag = "head")]
 pub struct Head {
@@ -68,19 +93,19 @@ pub struct Head {
   #[xml(flatten_text = "dateModified")]
   pub date_modified: Option<String>,
 
-  /// The owner of the document.
+  /// The name of the document owner.
   #[xml(flatten_text = "ownerName")]
   pub owner_name: Option<String>,
 
-  /// The email address of the owner of the document.
+  /// The email address of the document owner.
   #[xml(flatten_text = "ownerEmail")]
   pub owner_email: Option<String>,
 
-  /// A link to the website of the owner of the document.
+  /// A link to the website of the document owner.
   #[xml(flatten_text = "ownerId")]
   pub owner_id: Option<String>,
 
-  /// A link to the documentation of the OPML format.
+  /// A link to the documentation of the OPML format used for this document.
   #[xml(flatten_text = "docs")]
   pub docs: Option<String>,
 
@@ -109,16 +134,16 @@ pub struct Head {
   pub window_right: Option<i32>,
 }
 
-/// A `<body>` contains one or more `<outline>` elements.
+/// The `<body>` child element of `<opml>`. Contains all the `<outlines>`.
 #[derive(XmlWrite, XmlRead, PartialEq, Debug)]
 #[xml(tag = "body")]
 pub struct Body {
-  /// Child outlines of the body.
+  /// `<outline>` elements.
   #[xml(child = "outline")]
   pub outlines: Vec<Outline>,
 }
 
-/// An `<outline>` is an XML element containing at least one required attribute, text, and zero or more additional attributes. An `<outline>` may contain zero or more `<outline>` sub-elements. No attribute may be repeated within the same `<outline>` element.
+/// The `<outline>` element.
 #[derive(XmlWrite, XmlRead, PartialEq, Debug)]
 #[xml(tag = "outline")]
 pub struct Outline {
@@ -127,19 +152,19 @@ pub struct Outline {
   #[xml(attr = "text")]
   pub text: String,
 
-  /// A string that says how the other attributes of the `<outline>` are interpreted.
+  /// A string that indicates how the other attributes of the `<outline>` should be interpreted.
   #[xml(attr = "type")]
   pub r#type: Option<String>,
 
-  /// Indicating whether the outline is commented or not. By convention if an outline is commented, all subordinate outlines are considered to also be commented. If it's not present, the value is false.
+  /// Indicating whether the outline is commented or not. By convention if an outline is commented, all subordinate outlines are considered to also be commented. Defaults to `false`.
   #[xml(default, attr = "isComment")]
   pub is_comment: bool,
 
-  /// Indicating whether a breakpoint is set on this outline. This attribute is mainly necessary for outlines used to edit scripts. If it's not present, the value is false.
+  /// Indicating whether a breakpoint is set on this outline. This attribute is mainly necessary for outlines used to edit scripts. Defaults to `false`.
   #[xml(default, attr = "isBreakpoint")]
   pub is_breakpoint: bool,
 
-  /// The date-time (RFC822) that this outline node was created.
+  /// The date-time (RFC822) that this `<outline>` element was created.
   #[xml(attr = "created")]
   pub created: Option<String>,
 
@@ -147,7 +172,7 @@ pub struct Outline {
   #[xml(attr = "category")]
   pub category: Option<String>,
 
-  /// Child outlines of the current one.
+  /// Child `<outline>` elements of the current one.
   #[xml(child = "outline")]
   pub outlines: Vec<Outline>,
 

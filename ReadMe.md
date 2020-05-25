@@ -12,6 +12,17 @@
 
 This is the first crate I'm publishing to crates.io and the first proper library I've made for Rust. Any help or tips with how to improve the API, documentation, usability, testing or anything else is very welcome. Feel free to create [an issue](https://gitlab.com/holllo/opml-rs/issues/) or contact me via email at helllo@holllo.cc.
 
+## Getting Started
+
+```rust
+use opml::OPML;
+
+let xml = r#"<opml version="2.0"><head/><body><outline text="Outline"/></body></opml>"#;
+let parsed = OPML::new(xml).unwrap();
+
+println!("{:#?}", parsed);
+```
+
 ## License
 
 Open-sourced with either the
