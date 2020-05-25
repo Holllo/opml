@@ -8,37 +8,11 @@ fn test_minimum_valid_opml() {
     OPML::new(&read("tests/samples/minimum_valid_opml.opml").unwrap()).unwrap(),
     OPML {
       version: "2.0".to_string(),
-      head: Head {
-        title: None,
-        date_created: None,
-        date_modified: None,
-        owner_name: None,
-        owner_email: None,
-        owner_id: None,
-        docs: None,
-        expansion_state: None,
-        vert_scroll_state: None,
-        window_top: None,
-        window_left: None,
-        window_bottom: None,
-        window_right: None,
-      },
+      head: Head::default(),
       body: Body {
         outlines: vec![Outline {
           text: "Outline Text".to_string(),
-          r#type: None,
-          is_breakpoint: false,
-          is_comment: false,
-          created: None,
-          category: None,
-          xml_url: None,
-          description: None,
-          html_url: None,
-          language: None,
-          title: None,
-          version: None,
-          url: None,
-          outlines: vec![]
+          ..Outline::default()
         }]
       },
     }
@@ -71,8 +45,8 @@ fn test_valid_opml_with_everything() {
         outlines: vec![Outline {
           text: "Outline Text".to_string(),
           r#type: Some("Outline Type".to_string()),
-          is_breakpoint: true,
-          is_comment: true,
+          is_breakpoint: Some(true),
+          is_comment: Some(true),
           created: Some("Outline Date".to_string()),
           category: Some("Outline Category".to_string()),
           xml_url: Some("Outline XML URL".to_string()),
@@ -85,8 +59,8 @@ fn test_valid_opml_with_everything() {
           outlines: vec![Outline {
             text: "Nested Outline Text".to_string(),
             r#type: Some("Nested Outline Type".to_string()),
-            is_breakpoint: true,
-            is_comment: false,
+            is_breakpoint: Some(true),
+            is_comment: Some(false),
             created: Some("Nested Outline Date".to_string()),
             category: Some("Nested Outline Category".to_string()),
             xml_url: Some("Nested Outline XML URL".to_string()),

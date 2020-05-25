@@ -2,6 +2,8 @@
 //!
 //! ## Getting Started
 //!
+//! ### Parsing
+//!
 //! ```rust
 //! use opml::OPML;
 //!
@@ -9,6 +11,36 @@
 //! let parsed = OPML::new(xml).unwrap();
 //!
 //! println!("{:#?}", parsed);
+//! ```
+//!
+//! ### Constructing
+//!
+//! ```rust
+//! use opml::OPML;
+//!
+//! let mut opml = OPML::default();
+//! opml
+//!   .add_feed("Rust Blog", "https://blog.rust-lang.org/feed.xml")
+//!   .add_feed(
+//!     "Inside Rust",
+//!     "https://blog.rust-lang.org/inside-rust/feed.xml",
+//!   );
+//!
+//! opml.head.title = Some("Rust Feeds".to_string());
+//!
+//! let xml = opml.to_xml().unwrap();
+//! println!("{}", xml);
+//!
+//! // Outputs (without whitespace):
+//! // <opml version="2.0">
+//! //   <head>
+//! //     <title>Rust Feeds</title>
+//! //   </head>
+//! //   <body>
+//! //     <outline text="Rust Blog" xmlUrl="https://blog.rust-lang.org/feed.xml"/>
+//! //     <outline text="Inside Rust" xmlUrl="https://blog.rust-lang.org/inside-rust/feed.xml"/>
+//! //   </body>
+//! // </opml>
 //! ```
 //!
 //! ## License
@@ -28,7 +60,7 @@ use regex::Regex;
 use strong_xml::{XmlError, XmlRead, XmlWrite};
 
 /// The top-level `<opml>` element.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug)]
+#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone)]
 #[xml(tag = "opml")]
 pub struct OPML {
   /// The version attribute from the element.
@@ -74,11 +106,40 @@ impl OPML {
 
     Ok(opml)
   }
+
+  pub fn add_feed(&mut self, name: &str, url: &str) -> &mut Self {
+    self.body.outlines.push(Outline {
+      text: name.to_string(),
+      xml_url: Some(url.to_string()),
+      ..Outline::default()
+    });
+
+    self
+  }
+
+  pub fn to_xml(&self) -> Result<String, String> {
+    let result: Result<String, XmlError> = self.to_string();
+
+    match result {
+      Ok(value) => Ok(value),
+      Err(err) => Err(format!("XML writing error: {:#?}", err)),
+    }
+  }
+}
+
+impl Default for OPML {
+  fn default() -> Self {
+    OPML {
+      version: "2.0".to_string(),
+      head: Head::default(),
+      body: Body::default(),
+    }
+  }
 }
 
 /// The `<head>` child element of `<opml>`.
 /// Contains the metadata of the OPML document.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug)]
+#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Default)]
 #[xml(tag = "head")]
 pub struct Head {
   /// The title of the document.
@@ -135,7 +196,7 @@ pub struct Head {
 }
 
 /// The `<body>` child element of `<opml>`. Contains all the `<outlines>`.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug)]
+#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Default)]
 #[xml(tag = "body")]
 pub struct Body {
   /// `<outline>` elements.
@@ -144,7 +205,7 @@ pub struct Body {
 }
 
 /// The `<outline>` element.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug)]
+#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Default)]
 #[xml(tag = "outline")]
 pub struct Outline {
   /// Every outline element must have at least a text attribute, which is what is displayed when an outliner opens the OPML file.
@@ -156,13 +217,13 @@ pub struct Outline {
   #[xml(attr = "type")]
   pub r#type: Option<String>,
 
-  /// Indicating whether the outline is commented or not. By convention if an outline is commented, all subordinate outlines are considered to also be commented. Defaults to `false`.
-  #[xml(default, attr = "isComment")]
-  pub is_comment: bool,
+  /// Indicating whether the outline is commented or not. By convention if an outline is commented, all subordinate outlines are considered to also be commented.
+  #[xml(attr = "isComment")]
+  pub is_comment: Option<bool>,
 
-  /// Indicating whether a breakpoint is set on this outline. This attribute is mainly necessary for outlines used to edit scripts. Defaults to `false`.
-  #[xml(default, attr = "isBreakpoint")]
-  pub is_breakpoint: bool,
+  /// Indicating whether a breakpoint is set on this outline. This attribute is mainly necessary for outlines used to edit scripts.
+  #[xml(attr = "isBreakpoint")]
+  pub is_breakpoint: Option<bool>,
 
   /// The date-time (RFC822) that this `<outline>` element was created.
   #[xml(attr = "created")]
@@ -203,4 +264,16 @@ pub struct Outline {
   /// A link that can point to another OPML file or to something that can be displayed in a web browser.
   #[xml(attr = "url")]
   pub url: Option<String>,
+}
+
+impl Outline {
+  pub fn add_feed(&mut self, name: &str, url: &str) -> &mut Self {
+    self.outlines.push(Outline {
+      text: name.to_string(),
+      xml_url: Some(url.to_string()),
+      ..Outline::default()
+    });
+
+    self
+  }
 }
