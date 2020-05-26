@@ -8,7 +8,7 @@ fn test_minimum_valid_opml() {
     OPML::new(&read("tests/samples/minimum_valid_opml.opml").unwrap()).unwrap(),
     OPML {
       version: "2.0".to_string(),
-      head: Head::default(),
+      head: Some(Head::default()),
       body: Body {
         outlines: vec![Outline {
           text: "Outline Text".to_string(),
@@ -26,7 +26,7 @@ fn test_valid_opml_with_everything() {
       .unwrap(),
     OPML {
       version: "2.0".to_string(),
-      head: Head {
+      head: Some(Head {
         title: Some("Title".to_string()),
         date_created: Some("Date Created".to_string()),
         date_modified: Some("Date Modified".to_string()),
@@ -40,7 +40,7 @@ fn test_valid_opml_with_everything() {
         window_left: Some(2),
         window_bottom: Some(3),
         window_right: Some(4),
-      },
+      }),
       body: Body {
         outlines: vec![Outline {
           text: "Outline Text".to_string(),

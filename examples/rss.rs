@@ -7,7 +7,8 @@ fn main() -> Result<(), Box<dyn Error>> {
   let xml = fs::read_to_string("examples/opml_samples/rust_feeds.opml")?;
 
   let subscriptions = OPML::new(&xml)?;
-  let title = subscriptions.head.title.unwrap();
+  let head = subscriptions.head.unwrap();
+  let title = head.title.unwrap();
 
   println!(" {}", title);
   println!(" {}", "─".repeat(title.len()));

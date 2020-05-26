@@ -11,9 +11,11 @@ fn test_opml_construction_1() -> Result<(), Box<dyn Error>> {
     .add_feed(
       "Inside Rust",
       "https://blog.rust-lang.org/inside-rust/feed.xml",
-    );
-
-  opml.head.title = Some("Rust Feeds".to_string());
+    )
+    .set_head(Head {
+      title: Some("Rust Feeds".to_string()),
+      ..Head::default()
+    });
 
   let actual = opml.to_xml().unwrap();
   let expected = read("tests/samples/construction_1.opml")?;
@@ -26,6 +28,10 @@ fn test_opml_construction_1() -> Result<(), Box<dyn Error>> {
 #[test]
 fn test_opml_construction_2() -> Result<(), Box<dyn Error>> {
   let mut opml = OPML::default();
+  opml.set_head(Head {
+    title: Some("Rust Feeds".to_string()),
+    ..Head::default()
+  });
 
   let mut rust_group = Outline::default();
   rust_group.text = "Rust Feeds".to_string();
@@ -44,7 +50,6 @@ fn test_opml_construction_2() -> Result<(), Box<dyn Error>> {
 
   opml.body.outlines.push(rust_group);
   opml.body.outlines.push(mozilla_group);
-  opml.head.title = Some("Rust Feeds".to_string());
 
   let actual = opml.to_xml().unwrap();
   let expected = read("tests/samples/construction_2.opml")?;

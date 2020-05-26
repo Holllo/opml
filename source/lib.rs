@@ -7,7 +7,7 @@
 //! ```rust
 //! use opml::OPML;
 //!
-//! let xml = r#"<opml version="2.0"><head/><body><outline text="Outline"/></body></opml>"#;
+//! let xml = r#"<opml version="2.0"><body><outline text="Outline"/></body></opml>"#;
 //! let parsed = OPML::new(xml).unwrap();
 //!
 //! println!("{:#?}", parsed);
@@ -16,7 +16,7 @@
 //! ### Constructing
 //!
 //! ```rust
-//! use opml::OPML;
+//! use opml::{Head, OPML};
 //!
 //! let mut opml = OPML::default();
 //! opml
@@ -24,9 +24,11 @@
 //!   .add_feed(
 //!     "Inside Rust",
 //!     "https://blog.rust-lang.org/inside-rust/feed.xml",
-//!   );
-//!
-//! opml.head.title = Some("Rust Feeds".to_string());
+//!   )
+//!   .set_head(Head {
+//!     title: Some("Rust Feeds".to_string()),
+//!     ..Head::default()
+//!   });
 //!
 //! let xml = opml.to_xml().unwrap();
 //! println!("{}", xml);
@@ -69,7 +71,7 @@ pub struct OPML {
 
   /// The `<head>` child element. Contains the metadata of the OPML document.
   #[xml(child = "head")]
-  pub head: Head,
+  pub head: Option<Head>,
 
   /// The `<body>` child element. Contains all the `<outlines>`.
   #[xml(child = "body")]
@@ -117,6 +119,12 @@ impl OPML {
     self
   }
 
+  pub fn set_head(&mut self, head: Head) -> &mut Self {
+    self.head = Some(head);
+
+    self
+  }
+
   pub fn to_xml(&self) -> Result<String, String> {
     let result: Result<String, XmlError> = self.to_string();
 
@@ -131,7 +139,7 @@ impl Default for OPML {
   fn default() -> Self {
     OPML {
       version: "2.0".to_string(),
-      head: Head::default(),
+      head: Some(Head::default()),
       body: Body::default(),
     }
   }
