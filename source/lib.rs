@@ -88,12 +88,14 @@ impl OPML {
       Err(err) => return Err(format!("XML parsing error: {:#?}", err)),
     };
 
-    // TODO: Maybe implement version 1.0 and 1.1 of the OPML spec?
+    let version = &opml.version;
+
     // SPEC: The version attribute is a version string, of the form, x.y, where x and y are both numeric strings.
     let valid_version_regex = Regex::new(r"^\d+\.\d+$").unwrap();
+    let valid_versions = vec!["1.0", "1.1", "2.0"];
 
-    if !valid_version_regex.is_match(opml.version.as_str())
-      || opml.version != "2.0"
+    if !valid_version_regex.is_match(version)
+      || !valid_versions.contains(&version.as_str())
     {
       return Err(format!(
         "Unsupported OPML version detected: {}",

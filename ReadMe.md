@@ -1,6 +1,6 @@
 # OPML
 
-> An OPML 2.0 parser for Rust.
+> An OPML parser for Rust.
 
 ## Contents
 

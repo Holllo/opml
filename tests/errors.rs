@@ -10,20 +10,6 @@ fn test_invalid_xml() {
 }
 
 #[test]
-#[should_panic(expected = "Unsupported OPML version detected: 1.0")]
-fn test_invalid_opml_version_1_0() {
-  let sample = read("tests/samples/invalid_opml_version_1_0.opml").unwrap();
-  OPML::new(sample.as_str()).unwrap();
-}
-
-#[test]
-#[should_panic(expected = "Unsupported OPML version detected: 1.1")]
-fn test_invalid_opml_version_1_1() {
-  let sample = read("tests/samples/invalid_opml_version_1_1.opml").unwrap();
-  OPML::new(sample.as_str()).unwrap();
-}
-
-#[test]
 #[should_panic(expected = "Unsupported OPML version detected: invalid")]
 fn test_invalid_opml_version() {
   let sample = read("tests/samples/invalid_opml_version.opml").unwrap();
