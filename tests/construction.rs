@@ -11,11 +11,11 @@ fn test_opml_construction_1() -> Result<(), Box<dyn Error>> {
     .add_feed(
       "Inside Rust",
       "https://blog.rust-lang.org/inside-rust/feed.xml",
-    )
-    .set_head(Head {
-      title: Some("Rust Feeds".to_string()),
-      ..Head::default()
-    });
+    );
+  opml.head = Some(Head {
+    title: Some("Rust Feeds".to_string()),
+    ..Head::default()
+  });
 
   let actual = opml.to_xml().unwrap();
   let expected = read("tests/samples/construction_1.opml")?;
@@ -28,7 +28,7 @@ fn test_opml_construction_1() -> Result<(), Box<dyn Error>> {
 #[test]
 fn test_opml_construction_2() -> Result<(), Box<dyn Error>> {
   let mut opml = OPML::default();
-  opml.set_head(Head {
+  opml.head = Some(Head {
     title: Some("Rust Feeds".to_string()),
     ..Head::default()
   });

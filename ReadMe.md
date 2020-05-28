@@ -5,10 +5,10 @@
 ## Contents
 
 * [Examples](examples/)
-* [Expertise Wanted](#expertise-wanted)
+* [Expertise Welcome](#expertise-welcome)
 * [License](#license)
 
-## Expertise Wanted
+## Expertise Welcome
 
 This is the first crate I'm publishing to crates.io and the first proper library I've made for Rust. Any help or tips with how to improve the API, documentation, usability, testing or anything else is very welcome. Feel free to create [an issue](https://gitlab.com/holllo/opml-rs/issues/) or contact me via email at helllo@holllo.cc.
 
@@ -22,6 +22,8 @@ let parsed = OPML::new(xml).unwrap();
 
 println!("{:#?}", parsed);
 ```
+
+Check out [the documentation](https://docs.rs/opml/) for further details.
 
 ## License
 
