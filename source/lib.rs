@@ -62,10 +62,11 @@
 // TODO: Maybe use a date-time type for all the date-time places?
 
 use regex::Regex;
+use serde::{Deserialize, Serialize};
 use strong_xml::{XmlError, XmlRead, XmlWrite};
 
 /// The top-level [OPML](struct.OPML.html) element.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone)]
+#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[xml(tag = "opml")]
 pub struct OPML {
   /// The version attribute from the element, valid values are `1.0`, `1.1` and `2.0`.
@@ -196,7 +197,9 @@ impl Default for OPML {
 
 /// The [Head](struct.Head.html) child element of [OPML](struct.OPML.html).
 /// Contains the metadata of the OPML document.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Default)]
+#[derive(
+  XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize,
+)]
 #[xml(tag = "head")]
 pub struct Head {
   /// The title of the document.
@@ -253,7 +256,9 @@ pub struct Head {
 }
 
 /// The [Body](struct.Body.html) child element of [OPML](struct.OPML.html). Contains all the [Outlines](struct.Outline.html).
-#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Default)]
+#[derive(
+  XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize,
+)]
 #[xml(tag = "body")]
 pub struct Body {
   /// All the top-level [Outline](struct.Outline.html) elements.
@@ -262,7 +267,9 @@ pub struct Body {
 }
 
 /// The [Outline](struct.Outline.html) element.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Default)]
+#[derive(
+  XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize,
+)]
 #[xml(tag = "outline")]
 pub struct Outline {
   /// Every outline element must have at least a text attribute, which is what is displayed when an outliner opens the OPML document.
