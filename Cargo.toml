@@ -3,11 +3,11 @@
 [package]
 name = "opml"
 authors = ["Holllo <helllo@holllo.cc>"]
-version = "0.2.2"
-license = "MIT/Apache-2.0"
+version = "0.2.3"
+license = "MIT OR Apache-2.0"
 description = "An OPML parser for Rust."
-repository = "https://gitlab.com/holllo/opml-rs"
-readme = "ReadMe.md"
+repository = "https://git.holllo.cc/holllo/opml"
+readme = "README.md"
 edition = "2018"
 keywords = ["xml", "opml"]
 

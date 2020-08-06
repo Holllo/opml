@@ -45,21 +45,22 @@
 //! let expected = r#"<opml version="2.0"><head><title>Rust Feeds</title></head><body><outline text="Rust Blog" xmlUrl="https://blog.rust-lang.org/feed.xml"/><outline text="Inside Rust" xmlUrl="https://blog.rust-lang.org/inside-rust/feed.xml"/></body></opml>"#;
 //! println!("{}", xml);
 //! assert_eq!(xml, expected);
-//!
 //! ```
+//!
+//! ## CLI
+//!
+//! Looking for a command-line utility to parse OPML documents? Check out [the `opml-cli`](https://git.holllo.cc/Holllo/opml-cli/), a small wrapper around this crate that will let you do just that.
 //!
 //! ## License
 //!
 //! Open-sourced with either the
 //!
-//! * [Apache License, Version 2.0](https://gitlab.com/holllo/opml-rs/-/blob/master/License-Apache) (http://www.apache.org/licenses/LICENSE-2.0)
-//! * [MIT license](https://gitlab.com/holllo/opml-rs/-/blob/master/License-MIT) (http://opensource.org/licenses/MIT)
+//! * [Apache License, Version 2.0](https://git.holllo.cc/Holllo/opml/src/branch/main/LICENSE-Apache) (http://www.apache.org/licenses/LICENSE-2.0)
+//! * [MIT license](https://git.holllo.cc/Holllo/opml/src/branch/main/LICENSE-MIT) (http://opensource.org/licenses/MIT)
 //!
 //! at your option.
 //!
-//! The samples [located in `tests/spec_samples`](https://gitlab.com/holllo/opml-rs/-/blob/master/tests/spec_samples) were [taken from the OPML 2.0 spec](http://dev.opml.org/spec2.html#examples) and are subject to [their own license](https://gitlab.com/holllo/opml-rs/-/blob/master/tests/spec_samples/License).
-
-// TODO: Maybe use a date-time type for all the date-time places?
+//! The samples [located in `tests/spec_samples`](https://git.holllo.cc/Holllo/opml/src/branch/main/tests/spec_samples) were [taken from the OPML 2.0 spec](http://dev.opml.org/spec2.html#examples) and are subject to [their own license](https://git.holllo.cc/Holllo/opml/src/branch/main/tests/spec_samples/LICENSE).
 
 use regex::Regex;
 use serde::{Deserialize, Serialize};
@@ -86,7 +87,6 @@ impl OPML {
   /// Parses an OPML document.
   ///
   /// # Example
-  ///
   ///
   /// ```rust
   /// use opml::{OPML, Outline};
