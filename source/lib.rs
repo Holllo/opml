@@ -273,8 +273,9 @@ pub struct Body {
 #[xml(tag = "outline")]
 pub struct Outline {
   /// Every outline element must have at least a text attribute, which is what is displayed when an outliner opens the OPML document.
+  /// Version 1.0 OPML documents may omit this attribute, so for compatibility and strictness this attribute is "technically optional" as it will be replaced by an empty String if it is omitted.
   /// Text attributes may contain encoded HTML markup.
-  #[xml(attr = "text")]
+  #[xml(default, attr = "text")]
   pub text: String,
 
   /// A string that indicates how the other attributes of the [Outline](struct.Outline.html) should be interpreted.

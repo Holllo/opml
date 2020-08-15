@@ -77,3 +77,21 @@ fn test_valid_opml_with_everything() {
     }
   )
 }
+
+#[test]
+fn test_valid_opml_1_0() {
+  assert_eq!(
+    OPML::new(&read("tests/samples/valid_opml_1_0.opml").unwrap()).unwrap(),
+    OPML {
+      version: "1.0".to_string(),
+      head: Some(Head::default()),
+      body: Body {
+        outlines: vec![Outline {
+          text: String::default(),
+          title: Some("Outline Title".to_string()),
+          ..Outline::default()
+        }]
+      },
+    }
+  );
+}
