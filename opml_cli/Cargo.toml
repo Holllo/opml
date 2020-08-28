@@ -1,0 +1,28 @@
+# https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package]
+name = "opml_cli"
+description = "An OPML parser for the command-line."
+version = "0.3.0"
+authors = ["Holllo <helllo@holllo.cc>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Holllo/opml"
+readme = "../README.md"
+edition = "2018"
+keywords = ["xml", "opml"]
+
+[[bin]]
+name = "opml"
+path = "source/main.rs"
+
+[dependencies]
+clap = "2.33"
+opml = { path = "../opml_api", version = "0.3" }
+serde_json = "1.0"
+
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
+
+[dev-dependencies]
+assert_cmd = "1.0"

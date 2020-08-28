@@ -1,23 +1,7 @@
 # https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[package]
-name = "opml"
-authors = ["Holllo <helllo@holllo.cc>"]
-version = "0.2.4"
-license = "MIT OR Apache-2.0"
-description = "An OPML parser for Rust."
-repository = "https://git.holllo.cc/holllo/opml"
-readme = "README.md"
-edition = "2018"
-keywords = ["xml", "opml"]
-
-[lib]
-path = "source/lib.rs"
-
-[dependencies]
-regex = "1.3.9"
-strong-xml = "0.6.0"
-
-[dependencies.serde]
-version = "1.0.114"
-features = ["derive"]
+[workspace]
+members = [
+  "opml_api",
+  "opml_cli"
+]

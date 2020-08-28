@@ -1,0 +1,15 @@
+<opml version="1.1">
+  <body>
+    <outline text="YouTube Subscriptions"
+      title="YouTube Subscriptions">
+      <outline text="A YouTube Channel"
+        title="A YouTube Channel"
+        type="rss"
+        xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=abcdefghijklmnopqrstuvwxyz1" />
+      <outline text="Another YouTube Channel"
+        title="Another YouTube Channel"
+        type="rss"
+        xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=abcdefghijklmnopqrstuvwxyz2" />
+    </outline>
+  </body>
+</opml>
