@@ -67,286 +67,294 @@ use strong_xml::{XmlError, XmlRead, XmlWrite};
 #[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[xml(tag = "opml")]
 pub struct OPML {
-    /// The version attribute from the element, valid values are `1.0`, `1.1` and `2.0`.
-    #[xml(attr = "version")]
-    pub version: String,
+  /// The version attribute from the element, valid values are `1.0`, `1.1` and `2.0`.
+  #[xml(attr = "version")]
+  pub version: String,
 
-    /// The [Head](struct.Head.html) child element. Contains the metadata of the OPML document.
-    #[xml(child = "head")]
-    pub head: Option<Head>,
+  /// The [Head](struct.Head.html) child element. Contains the metadata of the OPML document.
+  #[xml(child = "head")]
+  pub head: Option<Head>,
 
-    /// The [Body](struct.Body.html) child element. Contains all the [Outlines](struct.Outline.html).
-    #[xml(child = "body")]
-    pub body: Body,
+  /// The [Body](struct.Body.html) child element. Contains all the [Outlines](struct.Outline.html).
+  #[xml(child = "body")]
+  pub body: Body,
 }
 
 impl OPML {
-    /// Parses an OPML document.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use opml::{OPML, Outline};
-    ///
-    /// let xml = r#"<opml version="2.0"><head/><body><outline text="Outline"/></body></opml>"#;
-    /// let parsed = OPML::new(xml).unwrap();
-    ///
-    /// let mut expected = OPML::default();
-    /// expected.body.outlines.push(Outline {
-    ///   text: "Outline".to_string(),
-    ///   ..Outline::default()
-    /// });
-    ///
-    /// assert_eq!(parsed, expected);
-    /// ```
-    pub fn new(xml: &str) -> Result<Self, String> {
-        let opml: Result<OPML, XmlError> = OPML::from_str(xml);
+  /// Parses an OPML document.
+  ///
+  /// # Example
+  ///
+  /// ```rust
+  /// use opml::{OPML, Outline};
+  ///
+  /// let xml = r#"<opml version="2.0"><head/><body><outline text="Outline"/></body></opml>"#;
+  /// let parsed = OPML::new(xml).unwrap();
+  ///
+  /// let mut expected = OPML::default();
+  /// expected.body.outlines.push(Outline {
+  ///   text: "Outline".to_string(),
+  ///   ..Outline::default()
+  /// });
+  ///
+  /// assert_eq!(parsed, expected);
+  /// ```
+  pub fn new(xml: &str) -> Result<Self, String> {
+    let opml: Result<OPML, XmlError> = OPML::from_str(xml);
 
-        let opml = match opml {
-            Ok(value) => value,
-            Err(err) => return Err(format!("XML parsing error: {:#?}", err)),
-        };
+    let opml = match opml {
+      Ok(value) => value,
+      Err(err) => return Err(format!("XML parsing error: {:#?}", err)),
+    };
 
-        let version = &opml.version;
+    let version = &opml.version;
 
-        // SPEC: The version attribute is a version string, of the form, x.y, where x and y are both numeric strings.
-        let valid_version_regex = Regex::new(r"^\d+\.\d+$").unwrap();
-        let valid_versions = vec!["1.0", "1.1", "2.0"];
+    // SPEC: The version attribute is a version string, of the form, x.y, where x and y are both numeric strings.
+    let valid_version_regex = Regex::new(r"^\d+\.\d+$").unwrap();
+    let valid_versions = vec!["1.0", "1.1", "2.0"];
 
-        if !valid_version_regex.is_match(version) || !valid_versions.contains(&version.as_str()) {
-            return Err(format!(
-                "Unsupported OPML version detected: {}",
-                opml.version
-            ));
-        }
-
-        // SPEC: A `<body>` contains one or more `<outline>` elements.
-        if opml.body.outlines.is_empty() {
-            return Err("OPML body has no outlines.".to_string());
-        }
-
-        Ok(opml)
+    if !valid_version_regex.is_match(version)
+      || !valid_versions.contains(&version.as_str())
+    {
+      return Err(format!(
+        "Unsupported OPML version detected: {}",
+        opml.version
+      ));
     }
 
-    /// Helper function to add an [Outline](struct.Outline.html) element with `text` and `xml_url` attributes to the [Body](struct.Body.html). Useful for creating feed lists quickly. This function [also exists on the Outline struct](struct.Outline.html#method.add_feed) to create grouped lists easily.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use opml::{OPML, Outline};
-    ///
-    /// let mut opml = OPML::default();
-    /// opml.add_feed("Feed Name", "https://example.com/");
-    /// let added_feed = opml.body.outlines.first().unwrap();
-    ///
-    /// let expected_feed = &Outline {
-    ///   text: "Feed Name".to_string(),
-    ///   xml_url: Some("https://example.com/".to_string()),
-    ///   ..Outline::default()
-    /// };
-    ///
-    /// assert_eq!(added_feed, expected_feed);
-    /// ```
-    pub fn add_feed(&mut self, text: &str, url: &str) -> &mut Self {
-        self.body.outlines.push(Outline {
-            text: text.to_string(),
-            xml_url: Some(url.to_string()),
-            ..Outline::default()
-        });
-
-        self
+    // SPEC: A `<body>` contains one or more `<outline>` elements.
+    if opml.body.outlines.is_empty() {
+      return Err("OPML body has no outlines.".to_string());
     }
 
-    /// Converts the struct to an XML document.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use opml::OPML;
-    ///
-    /// let opml = OPML::default();
-    /// let xml = opml.to_xml().unwrap();
-    ///
-    /// let expected = r#"<opml version="2.0"><head/><body/></opml>"#;
-    /// assert_eq!(xml, expected);
-    /// ```
-    pub fn to_xml(&self) -> Result<String, String> {
-        let result: Result<String, XmlError> = self.to_string();
+    Ok(opml)
+  }
 
-        match result {
-            Ok(value) => Ok(value),
-            Err(err) => Err(format!("XML writing error: {:#?}", err)),
-        }
+  /// Helper function to add an [Outline](struct.Outline.html) element with `text` and `xml_url` attributes to the [Body](struct.Body.html). Useful for creating feed lists quickly. This function [also exists on the Outline struct](struct.Outline.html#method.add_feed) to create grouped lists easily.
+  ///
+  /// # Example
+  ///
+  /// ```rust
+  /// use opml::{OPML, Outline};
+  ///
+  /// let mut opml = OPML::default();
+  /// opml.add_feed("Feed Name", "https://example.com/");
+  /// let added_feed = opml.body.outlines.first().unwrap();
+  ///
+  /// let expected_feed = &Outline {
+  ///   text: "Feed Name".to_string(),
+  ///   xml_url: Some("https://example.com/".to_string()),
+  ///   ..Outline::default()
+  /// };
+  ///
+  /// assert_eq!(added_feed, expected_feed);
+  /// ```
+  pub fn add_feed(&mut self, text: &str, url: &str) -> &mut Self {
+    self.body.outlines.push(Outline {
+      text: text.to_string(),
+      xml_url: Some(url.to_string()),
+      ..Outline::default()
+    });
+
+    self
+  }
+
+  /// Converts the struct to an XML document.
+  ///
+  /// # Example
+  ///
+  /// ```rust
+  /// use opml::OPML;
+  ///
+  /// let opml = OPML::default();
+  /// let xml = opml.to_xml().unwrap();
+  ///
+  /// let expected = r#"<opml version="2.0"><head/><body/></opml>"#;
+  /// assert_eq!(xml, expected);
+  /// ```
+  pub fn to_xml(&self) -> Result<String, String> {
+    let result: Result<String, XmlError> = self.to_string();
+
+    match result {
+      Ok(value) => Ok(value),
+      Err(err) => Err(format!("XML writing error: {:#?}", err)),
     }
+  }
 }
 
 impl Default for OPML {
-    fn default() -> Self {
-        OPML {
-            version: "2.0".to_string(),
-            head: Some(Head::default()),
-            body: Body::default(),
-        }
+  fn default() -> Self {
+    OPML {
+      version: "2.0".to_string(),
+      head: Some(Head::default()),
+      body: Body::default(),
     }
+  }
 }
 
 /// The [Head](struct.Head.html) child element of [OPML](struct.OPML.html).
 /// Contains the metadata of the OPML document.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(
+  XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize,
+)]
 #[xml(tag = "head")]
 pub struct Head {
-    /// The title of the document.
-    #[xml(flatten_text = "title")]
-    pub title: Option<String>,
+  /// The title of the document.
+  #[xml(flatten_text = "title")]
+  pub title: Option<String>,
 
-    /// A date-time (RFC822) indicating when the document was created.
-    #[xml(flatten_text = "dateCreated")]
-    pub date_created: Option<String>,
+  /// A date-time (RFC822) indicating when the document was created.
+  #[xml(flatten_text = "dateCreated")]
+  pub date_created: Option<String>,
 
-    /// A date-time (RFC822) indicating when the document was last modified.
-    #[xml(flatten_text = "dateModified")]
-    pub date_modified: Option<String>,
+  /// A date-time (RFC822) indicating when the document was last modified.
+  #[xml(flatten_text = "dateModified")]
+  pub date_modified: Option<String>,
 
-    /// The name of the document owner.
-    #[xml(flatten_text = "ownerName")]
-    pub owner_name: Option<String>,
+  /// The name of the document owner.
+  #[xml(flatten_text = "ownerName")]
+  pub owner_name: Option<String>,
 
-    /// The email address of the document owner.
-    #[xml(flatten_text = "ownerEmail")]
-    pub owner_email: Option<String>,
+  /// The email address of the document owner.
+  #[xml(flatten_text = "ownerEmail")]
+  pub owner_email: Option<String>,
 
-    /// A link to the website of the document owner.
-    #[xml(flatten_text = "ownerId")]
-    pub owner_id: Option<String>,
+  /// A link to the website of the document owner.
+  #[xml(flatten_text = "ownerId")]
+  pub owner_id: Option<String>,
 
-    /// A link to the documentation of the OPML format used for this document.
-    #[xml(flatten_text = "docs")]
-    pub docs: Option<String>,
+  /// A link to the documentation of the OPML format used for this document.
+  #[xml(flatten_text = "docs")]
+  pub docs: Option<String>,
 
-    /// A comma-separated list of line numbers that are expanded. The line numbers in the list tell you which headlines to expand. The order is important. For each element in the list, X, starting at the first summit, navigate flatdown X times and expand. Repeat for each element in the list.
-    #[xml(flatten_text = "expansionState")]
-    pub expansion_state: Option<String>,
+  /// A comma-separated list of line numbers that are expanded. The line numbers in the list tell you which headlines to expand. The order is important. For each element in the list, X, starting at the first summit, navigate flatdown X times and expand. Repeat for each element in the list.
+  #[xml(flatten_text = "expansionState")]
+  pub expansion_state: Option<String>,
 
-    /// A number indicating which line of the outline is displayed on the top line of the window. This number is calculated with the expansion state already applied.
-    #[xml(flatten_text = "vertScrollState")]
-    pub vert_scroll_state: Option<i32>,
+  /// A number indicating which line of the outline is displayed on the top line of the window. This number is calculated with the expansion state already applied.
+  #[xml(flatten_text = "vertScrollState")]
+  pub vert_scroll_state: Option<i32>,
 
-    /// The pixel location of the top edge of the window.
-    #[xml(flatten_text = "windowTop")]
-    pub window_top: Option<i32>,
+  /// The pixel location of the top edge of the window.
+  #[xml(flatten_text = "windowTop")]
+  pub window_top: Option<i32>,
 
-    /// The pixel location of the left edge of the window.
-    #[xml(flatten_text = "windowLeft")]
-    pub window_left: Option<i32>,
+  /// The pixel location of the left edge of the window.
+  #[xml(flatten_text = "windowLeft")]
+  pub window_left: Option<i32>,
 
-    /// The pixel location of the bottom edge of the window.
-    #[xml(flatten_text = "windowBottom")]
-    pub window_bottom: Option<i32>,
+  /// The pixel location of the bottom edge of the window.
+  #[xml(flatten_text = "windowBottom")]
+  pub window_bottom: Option<i32>,
 
-    /// The pixel location of the right edge of the window.
-    #[xml(flatten_text = "windowRight")]
-    pub window_right: Option<i32>,
+  /// The pixel location of the right edge of the window.
+  #[xml(flatten_text = "windowRight")]
+  pub window_right: Option<i32>,
 }
 
 /// The [Body](struct.Body.html) child element of [OPML](struct.OPML.html). Contains all the [Outlines](struct.Outline.html).
-#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(
+  XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize,
+)]
 #[xml(tag = "body")]
 pub struct Body {
-    /// All the top-level [Outline](struct.Outline.html) elements.
-    #[xml(child = "outline")]
-    pub outlines: Vec<Outline>,
+  /// All the top-level [Outline](struct.Outline.html) elements.
+  #[xml(child = "outline")]
+  pub outlines: Vec<Outline>,
 }
 
 /// The [Outline](struct.Outline.html) element.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(
+  XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize,
+)]
 #[xml(tag = "outline")]
 pub struct Outline {
-    /// Every outline element must have at least a text attribute, which is what is displayed when an outliner opens the OPML document.
-    /// Version 1.0 OPML documents may omit this attribute, so for compatibility and strictness this attribute is "technically optional" as it will be replaced by an empty String if it is omitted.
-    /// Text attributes may contain encoded HTML markup.
-    #[xml(default, attr = "text")]
-    pub text: String,
+  /// Every outline element must have at least a text attribute, which is what is displayed when an outliner opens the OPML document.
+  /// Version 1.0 OPML documents may omit this attribute, so for compatibility and strictness this attribute is "technically optional" as it will be replaced by an empty String if it is omitted.
+  /// Text attributes may contain encoded HTML markup.
+  #[xml(default, attr = "text")]
+  pub text: String,
 
-    /// A string that indicates how the other attributes of the [Outline](struct.Outline.html) should be interpreted.
-    #[xml(attr = "type")]
-    pub r#type: Option<String>,
+  /// A string that indicates how the other attributes of the [Outline](struct.Outline.html) should be interpreted.
+  #[xml(attr = "type")]
+  pub r#type: Option<String>,
 
-    /// Indicating whether the outline is commented or not. By convention if an outline is commented, all subordinate outlines are considered to also be commented.
-    #[xml(attr = "isComment")]
-    pub is_comment: Option<bool>,
+  /// Indicating whether the outline is commented or not. By convention if an outline is commented, all subordinate outlines are considered to also be commented.
+  #[xml(attr = "isComment")]
+  pub is_comment: Option<bool>,
 
-    /// Indicating whether a breakpoint is set on this outline. This attribute is mainly necessary for outlines used to edit scripts.
-    #[xml(attr = "isBreakpoint")]
-    pub is_breakpoint: Option<bool>,
+  /// Indicating whether a breakpoint is set on this outline. This attribute is mainly necessary for outlines used to edit scripts.
+  #[xml(attr = "isBreakpoint")]
+  pub is_breakpoint: Option<bool>,
 
-    /// The date-time (RFC822) that this [Outline](struct.Outline.html) element was created.
-    #[xml(attr = "created")]
-    pub created: Option<String>,
+  /// The date-time (RFC822) that this [Outline](struct.Outline.html) element was created.
+  #[xml(attr = "created")]
+  pub created: Option<String>,
 
-    /// A string of comma-separated slash-delimited category strings, in the format defined by the [RSS 2.0 category](http://cyber.law.harvard.edu/rss/rss.html#ltcategorygtSubelementOfLtitemgt) element. To represent a "tag," the category string should contain no slashes.
-    #[xml(attr = "category")]
-    pub category: Option<String>,
+  /// A string of comma-separated slash-delimited category strings, in the format defined by the [RSS 2.0 category](http://cyber.law.harvard.edu/rss/rss.html#ltcategorygtSubelementOfLtitemgt) element. To represent a "tag," the category string should contain no slashes.
+  #[xml(attr = "category")]
+  pub category: Option<String>,
 
-    /// Child [Outline](struct.Outline.html) elements of the current one.
-    #[xml(child = "outline")]
-    pub outlines: Vec<Outline>,
+  /// Child [Outline](struct.Outline.html) elements of the current one.
+  #[xml(child = "outline")]
+  pub outlines: Vec<Outline>,
 
-    /// The HTTP address of the feed.
-    #[xml(attr = "xmlUrl")]
-    pub xml_url: Option<String>,
+  /// The HTTP address of the feed.
+  #[xml(attr = "xmlUrl")]
+  pub xml_url: Option<String>,
 
-    /// The top-level description element from the feed.
-    #[xml(attr = "description")]
-    pub description: Option<String>,
+  /// The top-level description element from the feed.
+  #[xml(attr = "description")]
+  pub description: Option<String>,
 
-    /// The top-level link element from the feed.
-    #[xml(attr = "htmlUrl")]
-    pub html_url: Option<String>,
+  /// The top-level link element from the feed.
+  #[xml(attr = "htmlUrl")]
+  pub html_url: Option<String>,
 
-    /// The top-level language element from the feed.
-    #[xml(attr = "language")]
-    pub language: Option<String>,
+  /// The top-level language element from the feed.
+  #[xml(attr = "language")]
+  pub language: Option<String>,
 
-    /// The top-level title element from the feed.
-    #[xml(attr = "title")]
-    pub title: Option<String>,
+  /// The top-level title element from the feed.
+  #[xml(attr = "title")]
+  pub title: Option<String>,
 
-    /// The version of the feed's format (such as RSS 0.91, 2.0, ...).
-    #[xml(attr = "version")]
-    pub version: Option<String>,
+  /// The version of the feed's format (such as RSS 0.91, 2.0, ...).
+  #[xml(attr = "version")]
+  pub version: Option<String>,
 
-    /// A link that can point to another OPML document or to something that can be displayed in a web browser.
-    #[xml(attr = "url")]
-    pub url: Option<String>,
+  /// A link that can point to another OPML document or to something that can be displayed in a web browser.
+  #[xml(attr = "url")]
+  pub url: Option<String>,
 }
 
 impl Outline {
-    /// Helper function to add an [Outline](struct.Outline.html) element with `text` and `xml_url` attributes as a child element. Useful for creating grouped lists. This function [also exists on the OPML struct](struct.OPML.html#method.add_feed) for non-grouped lists.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use opml::{Outline};
-    ///
-    /// let mut group = Outline::default();
-    /// group.add_feed("Feed Name", "https://example.com/");
-    /// let added_feed = group.outlines.first().unwrap();
-    ///
-    /// let expected_feed = &Outline {
-    ///   text: "Feed Name".to_string(),
-    ///   xml_url: Some("https://example.com/".to_string()),
-    ///   ..Outline::default()
-    /// };
-    ///
-    /// assert_eq!(added_feed, expected_feed);
-    /// ```
-    pub fn add_feed(&mut self, name: &str, url: &str) -> &mut Self {
-        self.outlines.push(Outline {
-            text: name.to_string(),
-            xml_url: Some(url.to_string()),
-            ..Outline::default()
-        });
+  /// Helper function to add an [Outline](struct.Outline.html) element with `text` and `xml_url` attributes as a child element. Useful for creating grouped lists. This function [also exists on the OPML struct](struct.OPML.html#method.add_feed) for non-grouped lists.
+  ///
+  /// # Example
+  ///
+  /// ```rust
+  /// use opml::{Outline};
+  ///
+  /// let mut group = Outline::default();
+  /// group.add_feed("Feed Name", "https://example.com/");
+  /// let added_feed = group.outlines.first().unwrap();
+  ///
+  /// let expected_feed = &Outline {
+  ///   text: "Feed Name".to_string(),
+  ///   xml_url: Some("https://example.com/".to_string()),
+  ///   ..Outline::default()
+  /// };
+  ///
+  /// assert_eq!(added_feed, expected_feed);
+  /// ```
+  pub fn add_feed(&mut self, name: &str, url: &str) -> &mut Self {
+    self.outlines.push(Outline {
+      text: name.to_string(),
+      xml_url: Some(url.to_string()),
+      ..Outline::default()
+    });
 
-        self
-    }
+    self
+  }
 }
