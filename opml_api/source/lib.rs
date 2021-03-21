@@ -62,9 +62,22 @@
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use strong_xml::{XmlError, XmlRead, XmlWrite};
+use thiserror::Error;
+
+#[derive(Clone, Debug, Error)]
+pub enum Error {
+  #[error("OPML body has no <outlines> elements")]
+  BodyHasNoOutlines,
+  #[error("Unsupported OPML version: {0:?}")]
+  UnsupportedVersion(String),
+  #[error("Failed to process XML file")]
+  XmlError,
+}
 
 /// The top-level [OPML](struct.OPML.html) element.
-#[derive(XmlWrite, XmlRead, PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[derive(
+  XmlWrite, XmlRead, PartialEq, Debug, Clone, Serialize, Deserialize,
+)]
 #[xml(tag = "opml")]
 pub struct OPML {
   /// The version attribute from the element, valid values are `1.0`, `1.1` and `2.0`.
@@ -99,12 +112,12 @@ impl OPML {
   ///
   /// assert_eq!(parsed, expected);
   /// ```
-  pub fn new(xml: &str) -> Result<Self, String> {
+  pub fn new(xml: &str) -> Result<Self, Error> {
     let opml: Result<OPML, XmlError> = OPML::from_str(xml);
 
     let opml = match opml {
       Ok(value) => value,
-      Err(err) => return Err(format!("XML parsing error: {:#?}", err)),
+      Err(_) => return Err(Error::XmlError),
     };
 
     let version = &opml.version;
@@ -116,15 +129,12 @@ impl OPML {
     if !valid_version_regex.is_match(version)
       || !valid_versions.contains(&version.as_str())
     {
-      return Err(format!(
-        "Unsupported OPML version detected: {}",
-        opml.version
-      ));
+      return Err(Error::UnsupportedVersion(opml.version));
     }
 
     // SPEC: A `<body>` contains one or more `<outline>` elements.
     if opml.body.outlines.is_empty() {
-      return Err("OPML body has no outlines.".to_string());
+      return Err(Error::BodyHasNoOutlines);
     }
 
     Ok(opml)
@@ -172,12 +182,12 @@ impl OPML {
   /// let expected = r#"<opml version="2.0"><head/><body/></opml>"#;
   /// assert_eq!(xml, expected);
   /// ```
-  pub fn to_xml(&self) -> Result<String, String> {
+  pub fn to_xml(&self) -> Result<String, Error> {
     let result: Result<String, XmlError> = self.to_string();
 
     match result {
       Ok(value) => Ok(value),
-      Err(err) => Err(format!("XML writing error: {:#?}", err)),
+      Err(_) => Err(Error::XmlError),
     }
   }
 }
