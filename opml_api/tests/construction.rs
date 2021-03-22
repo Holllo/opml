@@ -26,6 +26,7 @@ fn test_opml_construction_1() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
+#[allow(clippy::field_reassign_with_default)]
 fn test_opml_construction_2() -> Result<(), Box<dyn Error>> {
   let mut opml = OPML::default();
   opml.head = Some(Head {

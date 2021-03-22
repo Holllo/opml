@@ -66,7 +66,7 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum Error {
-  #[error("OPML body has no <outlines> elements")]
+  #[error("OPML body has no <outline> elements")]
   BodyHasNoOutlines,
   #[error("Unsupported OPML version: {0:?}")]
   UnsupportedVersion(String),

@@ -116,7 +116,7 @@ checksum = "3728d817d99e5ac407411fa471ff9800a778d88a24685968b36824eaf4bee400"
 
 [[package]]
 name = "opml"
-version = "0.3.0"
+version = "1.0.0"
 dependencies = [
  "regex",
  "serde",
@@ -126,7 +126,7 @@ dependencies = [
 
 [[package]]
 name = "opml_cli"
-version = "0.3.0"
+version = "1.0.0"
 dependencies = [
  "assert_cmd",
  "clap",
