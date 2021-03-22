@@ -1,5 +1,5 @@
-use std::fs::read_to_string as read;
 use opml::*;
+use std::fs::read_to_string as read;
 
 #[test]
 #[should_panic]
