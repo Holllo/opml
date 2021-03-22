@@ -68,8 +68,13 @@ use thiserror::Error;
 pub enum Error {
   #[error("OPML body has no <outline> elements")]
   BodyHasNoOutlines,
+
+  #[error("Failed to read file")]
+  IoError(#[from] std::io::Error),
+
   #[error("Unsupported OPML version: {0:?}")]
   UnsupportedVersion(String),
+
   #[error("Failed to process XML file")]
   XmlError(#[from] strong_xml::XmlError),
 }
@@ -112,8 +117,31 @@ impl OPML {
   ///
   /// assert_eq!(parsed, expected);
   /// ```
+  #[deprecated(note = "use from_str instead", since = "1.1.0")]
   pub fn new(xml: &str) -> Result<Self, Error> {
-    let opml = OPML::from_str(xml)?;
+    Self::from_str(xml)
+  }
+
+  /// Parses an OPML document.
+  ///
+  /// # Example
+  ///
+  /// ```rust
+  /// use opml::{OPML, Outline};
+  ///
+  /// let xml = r#"<opml version="2.0"><head/><body><outline text="Outline"/></body></opml>"#;
+  /// let parsed = OPML::from_str(xml).unwrap();
+  ///
+  /// let mut expected = OPML::default();
+  /// expected.body.outlines.push(Outline {
+  ///   text: "Outline".to_string(),
+  ///   ..Outline::default()
+  /// });
+  ///
+  /// assert_eq!(parsed, expected);
+  /// ```
+  pub fn from_str(xml: &str) -> Result<Self, Error> {
+    let opml = <OPML as XmlRead>::from_str(xml)?;
 
     let version = &opml.version;
 
@@ -133,6 +161,26 @@ impl OPML {
     }
 
     Ok(opml)
+  }
+
+  /// Parses an OPML document from a reader.
+  ///
+  /// # Example
+  ///
+  /// ```rust,norun
+  /// use opml::{OPML, Outline};
+  /// use std::file::File;
+  ///
+  /// let file = File::open("opml.xml").unwrap();
+  /// let parsed = OPML::from_reader(file).unwrap();
+  /// ```
+  pub fn from_reader<R>(reader: &mut R) -> Result<Self, Error>
+  where
+    R: std::io::Read,
+  {
+    let mut s = String::new();
+    reader.read_to_string(&mut s)?;
+    Self::from_str(&s)
   }
 
   /// Helper function to add an [Outline](struct.Outline.html) element with `text` and `xml_url` attributes to the [Body](struct.Body.html). Useful for creating feed lists quickly. This function [also exists on the Outline struct](struct.Outline.html#method.add_feed) to create grouped lists easily.
@@ -177,8 +225,47 @@ impl OPML {
   /// let expected = r#"<opml version="2.0"><head/><body/></opml>"#;
   /// assert_eq!(xml, expected);
   /// ```
+  #[deprecated(note = "Use to_string instead")]
   pub fn to_xml(&self) -> Result<String, Error> {
-    Ok(self.to_string()?)
+    self.to_string()
+  }
+
+  /// Converts the struct to an XML document.
+  ///
+  /// # Example
+  ///
+  /// ```rust
+  /// use opml::OPML;
+  ///
+  /// let opml = OPML::default();
+  /// let xml = opml.to_string().unwrap();
+  ///
+  /// let expected = r#"<opml version="2.0"><head/><body/></opml>"#;
+  /// assert_eq!(xml, expected);
+  /// ```
+  pub fn to_string(&self) -> Result<String, Error> {
+    Ok(XmlWrite::to_string(self)?)
+  }
+
+  /// Converts the struct to an XML document and writes it using the writer.
+  ///
+  /// # Example
+  ///
+  /// ```rust,norun
+  /// use opml::OPML;
+  /// use std::file::File;
+  ///
+  /// let opml = OPML::default();
+  /// let file = File::create("opml.xml").unwrap();
+  /// let xml = opml.to_writer(file).unwrap();
+  /// ```
+  pub fn to_writer<W>(&self, writer: &mut W) -> Result<(), Error>
+  where
+    W: std::io::Write,
+  {
+    let xml_string = self.to_string()?;
+    writer.write_all(&xml_string.as_bytes())?;
+    Ok(())
   }
 }
 
