@@ -116,7 +116,7 @@ checksum = "3728d817d99e5ac407411fa471ff9800a778d88a24685968b36824eaf4bee400"
 
 [[package]]
 name = "opml"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "regex",
  "serde",
@@ -126,7 +126,7 @@ dependencies = [
 
 [[package]]
 name = "opml_cli"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "assert_cmd",
  "clap",
@@ -236,9 +236,9 @@ dependencies = [
 
 [[package]]
 name = "strong-xml"
-version = "0.6.1"
+version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da0e355b33893aa1b6d2f29110e729609c87a4241817a3e53ffba4c31421b1b1"
+checksum = "73d7a5a280d6097649ea2254eb65d38e81f1752fa47ea69d5fa2179470c8bf4c"
 dependencies = [
  "jetscii",
  "lazy_static",
@@ -249,9 +249,9 @@ dependencies = [
 
 [[package]]
 name = "strong-xml-derive"
-version = "0.6.1"
+version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e9053670189294a3fa7d7379a58b07ab0d0608debe80f5a16d31e2faa6e13b69"
+checksum = "2c3fa5e97f5557b119549b559e37bd3990528534110d0fdfa6c7e9b4c9a9d75a"
 dependencies = [
  "proc-macro2",
  "quote",

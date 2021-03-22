@@ -4,7 +4,7 @@
 name = "opml"
 description = "An OPML parser for Rust."
 authors = ["Holllo <helllo@holllo.cc>"]
-version = "1.0.0"
+version = "1.0.1"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/Holllo/opml"
 readme = "../README.md"
@@ -17,5 +17,5 @@ path = "source/lib.rs"
 [dependencies]
 regex = "1.3"
 serde = { version = "1.0", features = ["derive"] }
-strong-xml = "0.6.1"
+strong-xml = "0.6.2"
 thiserror = "1.0.24"
