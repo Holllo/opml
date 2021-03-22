@@ -61,17 +61,17 @@
 
 use regex::Regex;
 use serde::{Deserialize, Serialize};
-use strong_xml::{XmlError, XmlRead, XmlWrite};
+use strong_xml::{XmlRead, XmlWrite};
 use thiserror::Error;
 
-#[derive(Clone, Debug, Error)]
+#[derive(Debug, Error)]
 pub enum Error {
   #[error("OPML body has no <outlines> elements")]
   BodyHasNoOutlines,
   #[error("Unsupported OPML version: {0:?}")]
   UnsupportedVersion(String),
   #[error("Failed to process XML file")]
-  XmlError,
+  XmlError(#[from] strong_xml::XmlError),
 }
 
 /// The top-level [OPML](struct.OPML.html) element.
@@ -113,12 +113,7 @@ impl OPML {
   /// assert_eq!(parsed, expected);
   /// ```
   pub fn new(xml: &str) -> Result<Self, Error> {
-    let opml: Result<OPML, XmlError> = OPML::from_str(xml);
-
-    let opml = match opml {
-      Ok(value) => value,
-      Err(_) => return Err(Error::XmlError),
-    };
+    let opml = OPML::from_str(xml)?;
 
     let version = &opml.version;
 
@@ -183,12 +178,7 @@ impl OPML {
   /// assert_eq!(xml, expected);
   /// ```
   pub fn to_xml(&self) -> Result<String, Error> {
-    let result: Result<String, XmlError> = self.to_string();
-
-    match result {
-      Ok(value) => Ok(value),
-      Err(_) => Err(Error::XmlError),
-    }
+    Ok(self.to_string()?)
   }
 }
 
