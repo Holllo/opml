@@ -4,7 +4,7 @@
 name = "opml"
 description = "An OPML parser for Rust."
 authors = ["Holllo <helllo@holllo.cc>"]
-version = "1.0.1"
+version = "1.1.0"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/Holllo/opml"
 readme = "../README.md"
