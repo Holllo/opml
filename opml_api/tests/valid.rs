@@ -5,7 +5,8 @@ use opml::*;
 #[test]
 fn test_minimum_valid_opml() {
   assert_eq!(
-    OPML::new(&read("tests/samples/minimum_valid_opml.opml").unwrap()).unwrap(),
+    OPML::from_str(&read("tests/samples/minimum_valid_opml.opml").unwrap())
+      .unwrap(),
     OPML {
       version: "2.0".to_string(),
       head: Some(Head::default()),
@@ -22,8 +23,10 @@ fn test_minimum_valid_opml() {
 #[test]
 fn test_valid_opml_with_everything() {
   assert_eq!(
-    OPML::new(&read("tests/samples/valid_opml_with_everything.opml").unwrap())
-      .unwrap(),
+    OPML::from_str(
+      &read("tests/samples/valid_opml_with_everything.opml").unwrap()
+    )
+    .unwrap(),
     OPML {
       version: "2.0".to_string(),
       head: Some(Head {
@@ -81,7 +84,8 @@ fn test_valid_opml_with_everything() {
 #[test]
 fn test_valid_opml_1_0() {
   assert_eq!(
-    OPML::new(&read("tests/samples/valid_opml_1_0.opml").unwrap()).unwrap(),
+    OPML::from_str(&read("tests/samples/valid_opml_1_0.opml").unwrap())
+      .unwrap(),
     OPML {
       version: "1.0".to_string(),
       head: Some(Head::default()),

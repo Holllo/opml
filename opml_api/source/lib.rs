@@ -119,7 +119,7 @@ impl OPML {
   /// ```
   #[deprecated(note = "use from_str instead", since = "1.1.0")]
   pub fn new(xml: &str) -> Result<Self, Error> {
-    Self::from_str(xml)
+    Self::from_str(xml).map_err(Into::into)
   }
 
   /// Parses an OPML document.
@@ -140,6 +140,7 @@ impl OPML {
   ///
   /// assert_eq!(parsed, expected);
   /// ```
+  #[allow(clippy::should_implement_trait)]
   pub fn from_str(xml: &str) -> Result<Self, Error> {
     let opml = <OPML as XmlRead>::from_str(xml)?;
 
@@ -167,12 +168,12 @@ impl OPML {
   ///
   /// # Example
   ///
-  /// ```rust,norun
+  /// ```rust,no_run
   /// use opml::{OPML, Outline};
-  /// use std::file::File;
+  /// use std::fs::File;
   ///
-  /// let file = File::open("opml.xml").unwrap();
-  /// let parsed = OPML::from_reader(file).unwrap();
+  /// let mut file = File::open("file.opml").unwrap();
+  /// let parsed = OPML::from_reader(&mut file).unwrap();
   /// ```
   pub fn from_reader<R>(reader: &mut R) -> Result<Self, Error>
   where
@@ -180,7 +181,7 @@ impl OPML {
   {
     let mut s = String::new();
     reader.read_to_string(&mut s)?;
-    Self::from_str(&s)
+    Self::from_str(&s).map_err(Into::into)
   }
 
   /// Helper function to add an [Outline](struct.Outline.html) element with `text` and `xml_url` attributes to the [Body](struct.Body.html). Useful for creating feed lists quickly. This function [also exists on the Outline struct](struct.Outline.html#method.add_feed) to create grouped lists easily.
@@ -251,13 +252,13 @@ impl OPML {
   ///
   /// # Example
   ///
-  /// ```rust,norun
+  /// ```rust,no_run
   /// use opml::OPML;
-  /// use std::file::File;
+  /// use std::fs::File;
   ///
   /// let opml = OPML::default();
-  /// let file = File::create("opml.xml").unwrap();
-  /// let xml = opml.to_writer(file).unwrap();
+  /// let mut file = File::create("file.opml").unwrap();
+  /// let xml = opml.to_writer(&mut file).unwrap();
   /// ```
   pub fn to_writer<W>(&self, writer: &mut W) -> Result<(), Error>
   where

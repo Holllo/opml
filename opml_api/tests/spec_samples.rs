@@ -1,5 +1,4 @@
-use std::error::Error;
-use std::fs;
+use std::{error::Error, fs};
 
 use opml::*;
 
@@ -16,7 +15,7 @@ pub fn test_spec_samples() -> Result<(), Box<dyn Error>> {
 
   for sample in samples {
     let sample_content = fs::read_to_string(&sample)?;
-    OPML::new(sample_content.as_str())?;
+    OPML::from_str(&sample_content)?;
   }
 
   Ok(())

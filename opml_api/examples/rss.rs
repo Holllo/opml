@@ -1,12 +1,11 @@
-use std::error::Error;
-use std::fs;
+use std::{error::Error, fs};
 
 use opml::OPML;
 
 fn main() -> Result<(), Box<dyn Error>> {
   let xml = fs::read_to_string("examples/opml_samples/rust_feeds.opml")?;
 
-  let subscriptions = OPML::new(&xml)?;
+  let subscriptions = OPML::from_str(&xml)?;
   let head = subscriptions.head.unwrap();
   let title = head.title.unwrap();
 

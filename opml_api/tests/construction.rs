@@ -17,7 +17,7 @@ fn test_opml_construction_1() -> Result<(), Box<dyn Error>> {
     ..Head::default()
   });
 
-  let actual = opml.to_xml().unwrap();
+  let actual = opml.to_string().unwrap();
   let expected = read("tests/samples/construction_1.opml")?;
 
   assert_eq!(actual.trim(), expected.trim());
@@ -52,7 +52,7 @@ fn test_opml_construction_2() -> Result<(), Box<dyn Error>> {
   opml.body.outlines.push(rust_group);
   opml.body.outlines.push(mozilla_group);
 
-  let actual = opml.to_xml().unwrap();
+  let actual = opml.to_string().unwrap();
   let expected = read("tests/samples/construction_2.opml")?;
 
   assert_eq!(actual.trim(), expected.trim());

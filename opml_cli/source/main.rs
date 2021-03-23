@@ -62,7 +62,7 @@ fn main() {
   let xml = read_to_string(file).expect("Failed to read OPML file");
 
   // Parse the OPML from the read file.
-  let opml = OPML::new(&xml).expect("Failed to parse OPML file");
+  let opml = OPML::from_str(&xml).expect("Failed to parse OPML file");
 
   if rss {
     // Get all the outlines from the OPML document.
