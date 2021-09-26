@@ -16,13 +16,15 @@ name = "opml"
 path = "source/main.rs"
 
 [dependencies]
-clap = "2.33"
-opml = { path = "../opml_api", version = "1.1.1" }
-serde_json = "1.0"
+clap = "2.33.3"
+serde_json = "1.0.68"
+
+[dependencies.opml]
+path = "../opml_api"
 
 [dependencies.serde]
-version = "1.0"
+version = "1.0.130"
 features = ["derive"]
 
 [dev-dependencies]
-assert_cmd = "1.0"
+assert_cmd = "2.0.1"
