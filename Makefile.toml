@@ -1,0 +1,43 @@
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+
+[tasks.fmt]
+command = "cargo"
+args = ["fmt", "${@}"]
+
+[tasks.check]
+command = "cargo"
+args = ["check", "${@}"]
+
+[tasks.clippy]
+command = "cargo"
+args = ["clippy", "${@}"]
+
+[tasks.test]
+command = "cargo"
+args = ["test", "${@}"]
+
+[tasks.doc]
+command = "cargo"
+args = ["doc", "${@}"]
+
+[tasks.build]
+command = "cargo"
+args = ["build", "${@}"]
+
+[tasks.complete-check]
+dependencies = ["fmt", "check", "clippy", "test", "doc", "build"]
+
+[tasks.code-coverage]
+workspace = false
+install_crate = "cargo-tarpaulin"
+command = "cargo"
+args = [
+  "tarpaulin",
+  "--exclude-files=target/*",
+  "--out=html",
+  "--output-dir=.coverage",
+  "--skip-clean",
+  "--target-dir=target/tarpaulin",
+  "--workspace"
+]
