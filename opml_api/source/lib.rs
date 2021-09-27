@@ -217,7 +217,7 @@ impl OPML {
     W: std::io::Write,
   {
     let xml_string = self.to_string()?;
-    writer.write_all(&xml_string.as_bytes())?;
+    writer.write_all(xml_string.as_bytes())?;
     Ok(())
   }
 }
