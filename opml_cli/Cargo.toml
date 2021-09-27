@@ -3,7 +3,7 @@
 [package]
 name = "opml_cli"
 description = "An OPML parser for the command-line."
-version = "1.1.1"
+version = "1.1.2"
 authors = ["Holllo <helllo@holllo.cc>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/Holllo/opml"
