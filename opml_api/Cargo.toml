@@ -15,7 +15,6 @@ keywords = ["xml", "opml"]
 path = "source/lib.rs"
 
 [dependencies]
-regex = "1.5.4"
 strong-xml = "0.6.3"
 thiserror = "1.0.29"
 

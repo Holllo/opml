@@ -29,7 +29,6 @@
 //! To create an OPML document from scratch, use [`OPML::default()`] or the good
 //! old `OPML { /* ... */ }` syntax.
 
-use regex::Regex;
 use serde::{Deserialize, Serialize};
 use strong_xml::{XmlRead, XmlWrite};
 use thiserror::Error;
@@ -105,16 +104,11 @@ impl OPML {
   pub fn from_str(xml: &str) -> Result<Self, Error> {
     let opml = <OPML as XmlRead>::from_str(xml)?;
 
-    let version = &opml.version;
-
     // SPEC: The version attribute is a version string, of the form, x.y, where
     // x and y are both numeric strings.
-    let valid_version_regex = Regex::new(r"^\d+\.\d+$").unwrap();
     let valid_versions = vec!["1.0", "1.1", "2.0"];
 
-    if !valid_version_regex.is_match(version)
-      || !valid_versions.contains(&version.as_str())
-    {
+    if !valid_versions.contains(&opml.version.as_str()) {
       return Err(Error::UnsupportedVersion(opml.version));
     }
 
