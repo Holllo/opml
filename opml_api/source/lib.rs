@@ -16,7 +16,7 @@
 //! [as per the spec]: http://opml.org/spec2.opml#1629042198000
 //!
 //! ```rust
-//! use opml::{OPML, Outline};
+//! use opml::OPML;
 //!
 //! let xml = r#"<opml version="2.0"><head/><body><outline text="Outline"/></body></opml>"#;
 //! let document = OPML::from_str(xml).unwrap();
@@ -125,7 +125,7 @@ impl OPML {
   /// # Example
   ///
   /// ```rust,no_run
-  /// use opml::{OPML, Outline};
+  /// use opml::OPML;
   /// use std::fs::File;
   ///
   /// let mut file = File::open("file.opml").unwrap();
