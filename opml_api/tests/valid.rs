@@ -99,3 +99,17 @@ fn test_valid_opml_1_0() {
     }
   );
 }
+
+#[test]
+fn test_valid_from_reader() {
+  let xml = r#"<opml version="2.0"><head/><body><outline text="Outline"/></body></opml>"#;
+  assert!(OPML::from_reader(&mut xml.as_bytes()).is_ok());
+}
+
+#[test]
+fn test_valid_to_writer() {
+  let document = OPML::default();
+  let mut writer = vec![];
+  assert!(document.to_writer(&mut writer).is_ok());
+  assert!(!writer.is_empty());
+}
