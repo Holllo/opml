@@ -87,6 +87,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
+name = "hard-xml"
+version = "1.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8c049a5d5186e83c3cf139192e81ab9d06c6b20d18c8aa06b38f3f6a5ece8703"
+dependencies = [
+ "hard-xml-derive",
+ "jetscii",
+ "lazy_static",
+ "memchr",
+ "xmlparser",
+]
+
+[[package]]
+name = "hard-xml-derive"
+version = "1.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d24cec6f13bd2423158425bdb5f5ba0f2ddf7d7c2a825c0fdbf20c513df49725"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "hermit-abi"
 version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -138,8 +162,8 @@ checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
 name = "opml"
 version = "1.1.3"
 dependencies = [
+ "hard-xml",
  "serde",
- "strong-xml",
  "thiserror",
 ]
 
@@ -240,30 +264,6 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
-]
-
-[[package]]
-name = "strong-xml"
-version = "0.6.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d19fb3a618e2f1039e32317c9f525e6d45c55af704ec7c429aa74412419bebf"
-dependencies = [
- "jetscii",
- "lazy_static",
- "memchr",
- "strong-xml-derive",
- "xmlparser",
-]
-
-[[package]]
-name = "strong-xml-derive"
-version = "0.6.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "92c781f499321613b112be5d9338189ef1ed19689a01edd23d923ea57ad5c7e1"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]

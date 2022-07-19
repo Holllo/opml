@@ -30,7 +30,7 @@
 //! old `OPML { /* ... */ }` syntax.
 
 use serde::{Deserialize, Serialize};
-use strong_xml::{XmlRead, XmlWrite};
+use hard_xml::{XmlRead, XmlWrite};
 use thiserror::Error;
 
 /// All possible errors.
@@ -52,7 +52,7 @@ pub enum Error {
 
   /// The input string is not valid XML.
   #[error("Failed to process XML file")]
-  XmlError(#[from] strong_xml::XmlError),
+  XmlError(#[from] hard_xml::XmlError),
 }
 
 /// The top-level [`OPML`] element.
