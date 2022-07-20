@@ -23,15 +23,12 @@ fn test_minimum_valid_opml() {
 #[test]
 fn test_valid_empty_docs() {
   assert_eq!(
-    OPML::from_str(
-      &read("tests/samples/empty_docs.opml").unwrap()
-    )
-    .unwrap(),
+    OPML::from_str(&read("tests/samples/empty_docs.opml").unwrap()).unwrap(),
     OPML {
       version: "2.0".to_string(),
       head: Some(Head {
         docs: Some("".to_string()),
-         ..Head::default()
+        ..Head::default()
       }),
       body: Body {
         outlines: vec![Outline {

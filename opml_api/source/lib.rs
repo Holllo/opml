@@ -29,8 +29,8 @@
 //! To create an OPML document from scratch, use [`OPML::default()`] or the good
 //! old `OPML { /* ... */ }` syntax.
 
-use serde::{Deserialize, Serialize};
 use hard_xml::{XmlRead, XmlWrite};
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 /// All possible errors.
