@@ -57,7 +57,7 @@ pub enum Error {
 
 /// The top-level [`OPML`] element.
 #[derive(
-  XmlWrite, XmlRead, PartialEq, Debug, Clone, Serialize, Deserialize,
+  XmlWrite, XmlRead, PartialEq, Eq, Debug, Clone, Serialize, Deserialize,
 )]
 #[xml(tag = "opml")]
 pub struct OPML {
@@ -229,7 +229,15 @@ impl Default for OPML {
 /// The [`Head`] child element of [`OPML`]. Contains the metadata of the OPML
 /// document.
 #[derive(
-  XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize,
+  XmlWrite,
+  XmlRead,
+  PartialEq,
+  Eq,
+  Debug,
+  Clone,
+  Default,
+  Serialize,
+  Deserialize,
 )]
 #[xml(tag = "head")]
 pub struct Head {
@@ -294,7 +302,15 @@ pub struct Head {
 /// The [`Body`] child element of [`OPML`]. Contains all the [`Outline`]
 /// elements.
 #[derive(
-  XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize,
+  XmlWrite,
+  XmlRead,
+  PartialEq,
+  Eq,
+  Debug,
+  Clone,
+  Default,
+  Serialize,
+  Deserialize,
 )]
 #[xml(tag = "body")]
 pub struct Body {
@@ -305,7 +321,15 @@ pub struct Body {
 
 /// The [`Outline`] element.
 #[derive(
-  XmlWrite, XmlRead, PartialEq, Debug, Clone, Default, Serialize, Deserialize,
+  XmlWrite,
+  XmlRead,
+  PartialEq,
+  Eq,
+  Debug,
+  Clone,
+  Default,
+  Serialize,
+  Deserialize,
 )]
 #[xml(tag = "outline")]
 pub struct Outline {
