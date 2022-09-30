@@ -2,13 +2,13 @@
 
 [package]
 name = "opml"
-description = "An OPML parser for Rust."
-authors = ["Holllo <helllo@holllo.cc>"]
-version = "1.1.4"
+description = "OPML library for Rust."
+repository = "https://git.bauke.xyz/Holllo/opml"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/Holllo/opml"
-readme = "../README.md"
+version = "1.1.4"
+authors = ["Holllo <helllo@holllo.org>"]
 edition = "2021"
+readme = "../README.md"
 keywords = ["xml", "opml"]
 
 [lib]

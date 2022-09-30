@@ -3,12 +3,12 @@
 [package]
 name = "opml_cli"
 description = "OPML for the command-line."
-version = "1.1.4"
-authors = ["Holllo <helllo@holllo.cc>"]
+repository = "https://git.bauke.xyz/Holllo/opml"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/Holllo/opml"
-readme = "../README.md"
+version = "1.1.4"
+authors = ["Holllo <helllo@holllo.org>"]
 edition = "2021"
+readme = "../README.md"
 keywords = ["xml", "opml"]
 
 [[bin]]
