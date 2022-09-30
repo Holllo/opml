@@ -1,21 +1,27 @@
-# OPML
+# OPML 📄
 
-> An OPML parser for Rust and the command-line.
+> **OPML library for Rust & standalone CLI.**
 
 ## API
 
-For the API documentation, see [docs.rs](https://docs.rs/opml).
+For API documentation and examples see [docs.rs](https://docs.rs/opml).
 
 ## CLI
 
-To install the OPML command-line parser, run `cargo install opml_cli` or download a precompiled executable directly from [the Releases page](https://github.com/Holllo/opml/releases/latest).
+### Cargo
 
-Then run `opml --help` to see all the available options.
+With a working [Rust and Cargo](https://www.rust-lang.org/learn/get-started) installation, you can install the OPML CLI from [Crates.io](https://crates.io/crates/opml_cli).
+
+```
+cargo install opml_cli
+```
+
+### Binaries
+
+Precompiled `x86_64-unknown-linux-gnu` binaries are available on the [Releases page](https://git.bauke.xyz/Holllo/opml/releases).
 
 ## License
 
-Both the API and command-line parser are licensed under either of [Apache License, Version 2.0](https://github.com/Holllo/opml/blob/main/LICENSE-Apache) or [MIT license](https://github.com/Holllo/opml/blob/main/LICENSE-MIT) at your option.
+Distributed under the [Apache License 2.0](https://spdx.org/licenses/Apache-2.0.html) and [MIT](https://spdx.org/licenses/MIT.html) licenses, see [LICENSE-Apache](https://git.bauke.xyz/Holllo/opml/src/branch/main/LICENSE-Apache) and [LICENSE-MIT](https://git.bauke.xyz/Holllo/opml/src/branch/main/LICENSE-MIT) for more information.
 
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in either crate by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
-
-The samples [located in `opml_api/tests/spec_samples`](https://github.com/Holllo/opml/tree/main/opml_api/tests/spec_samples) were [taken from the OPML 2.0 spec](http://dev.opml.org/spec2.html#examples) and are subject to [their own license](https://github.com/Holllo/opml/blob/main/opml_api/tests/spec_samples/LICENSE).
+The samples located in `opml_api/tests/spec_samples`) were [taken from the OPML 2.0 spec](http://dev.opml.org/spec2.html#examples) and are subject to [their own license](https://git.bauke.xyz/Holllo/opml/src/branch/main/opml_api/tests/spec_samples/LICENSE).
