@@ -36,7 +36,7 @@ args = [
   "tarpaulin",
   "--exclude-files=target/*",
   "--out=html",
-  "--output-dir=.coverage",
+  "--output-dir=coverage",
   "--skip-clean",
   "--target-dir=target/tarpaulin",
   "--workspace"
