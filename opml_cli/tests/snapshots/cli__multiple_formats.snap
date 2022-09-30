@@ -1,0 +1,10 @@
+---
+source: opml_cli/tests/cli.rs
+expression: output
+---
+error: The argument '--rss' cannot be used with '--json'
+
+Usage: opml --file <FILE> --json --json-pretty --rss
+
+For more information try '--help'
+

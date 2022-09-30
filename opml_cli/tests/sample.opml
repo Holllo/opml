@@ -1,0 +1,9 @@
+<opml version="2.0">
+  <head>
+    <title>Rust Feeds</title>
+  </head>
+  <body>
+    <outline text="Rust Blog" xmlUrl="https://blog.rust-lang.org/feed.xml" />
+    <outline text="Inside Rust" xmlUrl="https://blog.rust-lang.org/inside-rust/feed.xml" />
+  </body>
+</opml>

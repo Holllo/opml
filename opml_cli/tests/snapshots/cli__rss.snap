@@ -1,0 +1,9 @@
+---
+source: opml_cli/tests/cli.rs
+expression: output
+---
+Rust Blog
+https://blog.rust-lang.org/feed.xml
+Inside Rust
+https://blog.rust-lang.org/inside-rust/feed.xml
+

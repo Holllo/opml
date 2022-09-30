@@ -1,0 +1,6 @@
+---
+source: opml_cli/tests/cli.rs
+expression: output
+---
+{"version":"2.0","head":{"title":"Rust Feeds","date_created":null,"date_modified":null,"owner_name":null,"owner_email":null,"owner_id":null,"docs":null,"expansion_state":null,"vert_scroll_state":null,"window_top":null,"window_left":null,"window_bottom":null,"window_right":null},"body":{"outlines":[{"text":"Rust Blog","type":null,"is_comment":null,"is_breakpoint":null,"created":null,"category":null,"outlines":[],"xml_url":"https://blog.rust-lang.org/feed.xml","description":null,"html_url":null,"language":null,"title":null,"version":null,"url":null},{"text":"Inside Rust","type":null,"is_comment":null,"is_breakpoint":null,"created":null,"category":null,"outlines":[],"xml_url":"https://blog.rust-lang.org/inside-rust/feed.xml","description":null,"html_url":null,"language":null,"title":null,"version":null,"url":null}]}}
+

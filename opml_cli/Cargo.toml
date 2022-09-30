@@ -32,3 +32,5 @@ features = ["derive"]
 
 [dev-dependencies]
 assert_cmd = "2.0.4"
+insta = "1.21.0"
+test-case = "2.2.1"
