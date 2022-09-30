@@ -1,70 +1,43 @@
-use std::fs::read_to_string;
+use std::{fs::read_to_string, path::PathBuf};
 
-use clap::{
-  crate_authors, crate_description, crate_version, App, Arg, ArgGroup,
-};
+use clap::Parser;
 use opml::{Outline, OPML};
 
+#[derive(Debug, Parser)]
+#[clap(about, author, version)]
+struct Args {
+  /// The OPML file to parse.
+  #[clap(short, long)]
+  file: PathBuf,
+
+  /// Output the OPML as JSON.
+  #[clap(long, group = "format", required = true)]
+  json: bool,
+
+  /// Output the OPML as pretty-printed JSON.
+  #[clap(long, group = "format", required = true)]
+  json_pretty: bool,
+
+  /// Only output the outline text and xmlUrl attributes when both are present
+  /// in the outline element.
+  #[clap(long, group = "format", required = true)]
+  rss: bool,
+
+  /// Print extra information while running.
+  #[clap(long)]
+  verbose: bool,
+}
+
 fn main() {
-  let cli = App::new("OPML CLI")
-    .about(crate_description!())
-    .author(crate_authors!())
-    .version(crate_version!())
-    .args(&[
-      // Format flags.
-      Arg::with_name("json")
-        .long("json")
-        .long_help("Output the OPML as JSON.")
-        .takes_value(false),
-      Arg::with_name("json pretty")
-        .long("json-pretty")
-        .long_help("Output the OPML as pretty-printed JSON.")
-        .takes_value(false),
-      Arg::with_name("rss")
-        .long("rss")
-        .long_help(
-          "Only output the outline text and xmlUrl attributes \
-          when both are present in the outline element.",
-        )
-        .takes_value(false),
-      // Boolean flags.
-      Arg::with_name("verbose")
-        .long("verbose")
-        .long_help("Print extra information while running.")
-        .takes_value(false),
-      // Options that are only allowed once.
-      Arg::with_name("file")
-        .long("file")
-        .long_help("The OPML file to parse.")
-        .required(true)
-        .short("f")
-        .takes_value(true),
-    ])
-    .group(
-      ArgGroup::with_name("format")
-        .args(&["json", "json pretty", "rss"])
-        .required(true),
-    )
-    .get_matches();
-
-  // Extract format flags.
-  let json = cli.is_present("json");
-  let json_pretty = cli.is_present("json pretty");
-  let rss = cli.is_present("rss");
-
-  // Extract boolean flags.
-  let verbose = cli.is_present("verbose");
-
-  // Extract the various options.
-  let file = cli.value_of("file").unwrap();
+  let args = Args::parse();
 
   // Read the file to string.
-  let xml = read_to_string(file).expect("Failed to read OPML file");
+  let xml = read_to_string(args.file).expect("Failed to read OPML file");
 
   // Parse the OPML from the read file.
   let opml = OPML::from_str(&xml).expect("Failed to parse OPML file");
 
-  if rss {
+  if args.rss {
     // Get all the outlines from the OPML document.
     let outlines = extract_all_outlines(&opml.body.outlines);
 
@@ -73,19 +46,19 @@ fn main() {
       if let Some(xml_url) = outline.xml_url {
         println!("{}", outline.text);
         println!("{}", xml_url);
-      } else if verbose {
+      } else if args.verbose {
         println!(
           "Skipping \"{}\" because it did not have an xmlUrl attribute.",
           outline.text
         );
       }
     }
-  } else if json {
+  } else if args.json {
     println!(
       "{}",
       serde_json::to_string(&opml).expect("Failed to convert OPML to JSON")
     );
-  } else if json_pretty {
+  } else if args.json_pretty {
     println!(
       "{}",
       serde_json::to_string_pretty(&opml)
