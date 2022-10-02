@@ -229,7 +229,7 @@ checksum = "e82dad04139b71a90c080c8463fe0dc7902db5192d939bd0950f074d014339e1"
 
 [[package]]
 name = "opml"
-version = "1.1.4"
+version = "1.1.5"
 dependencies = [
  "hard-xml",
  "serde",
@@ -238,7 +238,7 @@ dependencies = [
 
 [[package]]
 name = "opml_cli"
-version = "1.1.4"
+version = "1.1.5"
 dependencies = [
  "assert_cmd",
  "clap",
