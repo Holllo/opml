@@ -29,6 +29,9 @@
 //! To create an OPML document from scratch, use [`OPML::default()`] or the good
 //! old `OPML { /* ... */ }` syntax.
 
+#![forbid(unsafe_code)]
+#![warn(missing_docs, clippy::missing_docs_in_private_items)]
+
 use hard_xml::{XmlRead, XmlWrite};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
