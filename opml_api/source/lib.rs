@@ -129,9 +129,8 @@ impl OPML {
   ///
   /// ```rust,no_run
   /// use opml::OPML;
-  /// use std::fs::File;
   ///
-  /// let mut file = File::open("file.opml").unwrap();
+  /// let mut file = std::fs::File::open("file.opml").unwrap();
   /// let document = OPML::from_reader(&mut file).unwrap();
   /// ```
   pub fn from_reader<R>(reader: &mut R) -> Result<Self, Error>
@@ -203,10 +202,9 @@ impl OPML {
   ///
   /// ```rust,no_run
   /// use opml::OPML;
-  /// use std::fs::File;
   ///
   /// let opml = OPML::default();
-  /// let mut file = File::create("file.opml").unwrap();
+  /// let mut file = std::fs::File::create("file.opml").unwrap();
   /// let xml = opml.to_writer(&mut file).unwrap();
   /// ```
   pub fn to_writer<W>(&self, writer: &mut W) -> Result<(), Error>
@@ -417,7 +415,7 @@ impl Outline {
   /// # Example
   ///
   /// ```rust
-  /// use opml::{Outline};
+  /// use opml::Outline;
   ///
   /// let mut group = Outline::default();
   /// group.add_feed("Feed Name", "https://example.com/");
