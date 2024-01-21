@@ -14,7 +14,7 @@ pub fn test_spec_samples() -> Result<(), Box<dyn Error>> {
   ];
 
   for sample in samples {
-    let sample_content = fs::read_to_string(&sample)?;
+    let sample_content = fs::read_to_string(sample)?;
     OPML::from_str(&sample_content)?;
   }
 

@@ -109,7 +109,7 @@ impl OPML {
 
     // SPEC: The version attribute is a version string, of the form, x.y, where
     // x and y are both numeric strings.
-    let valid_versions = vec!["1.0", "1.1", "2.0"];
+    let valid_versions = ["1.0", "1.1", "2.0"];
 
     if !valid_versions.contains(&opml.version.as_str()) {
       return Err(Error::UnsupportedVersion(opml.version));
