@@ -5,3 +5,4 @@ members = [
   "opml_api",
   "opml_cli"
 ]
+resolver = "2"
