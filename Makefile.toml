@@ -1,36 +1,24 @@
 [env]
 CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
 
-[tasks.fmt]
-command = "cargo"
-args = ["fmt", "${@}"]
-
-[tasks.check]
-command = "cargo"
-args = ["check", "${@}"]
-
-[tasks.clippy]
-command = "cargo"
-args = ["clippy", "${@}"]
-
-[tasks.test]
-command = "cargo"
-args = ["test", "${@}"]
-
-[tasks.doc]
-command = "cargo"
-args = ["doc", "${@}"]
-
-[tasks.build]
-command = "cargo"
-args = ["build", "${@}"]
-
+# Do a full check of everything.
 [tasks.complete-check]
-dependencies = ["fmt", "check", "clippy", "test", "doc", "build"]
+dependencies = [
+  "clean",
+  "format",
+  "check",
+  "clippy",
+  "test",
+  "code-coverage",
+  "docs",
+  "build",
+  "audit-flow",
+  "outdated-flow"
+]
 
+# Run cargo-tarpaulin and output the test coverage.
 [tasks.code-coverage]
 workspace = false
-install_crate = "cargo-tarpaulin"
 command = "cargo"
 args = [
   "tarpaulin",
