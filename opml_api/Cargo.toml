@@ -15,9 +15,9 @@ keywords = ["xml", "opml"]
 path = "source/lib.rs"
 
 [dependencies]
-hard-xml = "1.13.0"
-thiserror = "1.0.37"
+hard-xml = "1.34.0"
+thiserror = "1.0.56"
 
 [dependencies.serde]
-version = "1.0.145"
+version = "1.0.195"
 features = ["derive"]

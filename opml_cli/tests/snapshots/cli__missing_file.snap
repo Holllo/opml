@@ -2,12 +2,12 @@
 source: opml_cli/tests/cli.rs
 expression: output
 ---
-error: The following required arguments were not provided:
+error: the following required arguments were not provided:
   --file <FILE>
   --json
   --json-pretty
 
 Usage: opml --file <FILE> --json --json-pretty --rss
 
-For more information try '--help'
+For more information, try '--help'.
 
