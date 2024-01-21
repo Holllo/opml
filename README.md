@@ -20,6 +20,10 @@ cargo install opml_cli
 
 Precompiled `x86_64-unknown-linux-gnu` binaries are available on the [Releases page](https://git.bauke.xyz/Holllo/opml/releases).
 
+## Development
+
+With [Nix flakes](https://nixos.wiki/wiki/Flakes) and [direnv](https://direnv.net/) installed and enabled, all the required dependencies are automatically loaded from [`shell.nix`](./shell.nix). Then [cargo-make](https://sagiegurari.github.io/cargo-make/) can be used to build, deploy and lint the code. The available tasks are all described in the [`Makefile.toml`](Makefile.toml) configuration.
+
 ## License
 
 Distributed under the [Apache License 2.0](https://spdx.org/licenses/Apache-2.0.html) and [MIT](https://spdx.org/licenses/MIT.html) licenses, see [LICENSE-Apache](https://git.bauke.xyz/Holllo/opml/src/branch/main/LICENSE-Apache) and [LICENSE-MIT](https://git.bauke.xyz/Holllo/opml/src/branch/main/LICENSE-MIT) for more information.
